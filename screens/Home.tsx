@@ -1,5 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, {
+  Fragment,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
 import {
   View,
   Text,
@@ -7,20 +13,24 @@ import {
   Alert,
   StyleSheet,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
-import Animated, {
-  Value,
-  event,
-  cond,
-  eq,
-  add,
+import Animated, { interpolate, Extrapolate } from 'react-native-reanimated';
+import {
+  State,
+  PanGestureHandler,
+  NativeViewGestureHandler,
+} from 'react-native-gesture-handler';
+import {
+  usePanGestureHandler,
+  withOffset,
   diffClamp,
-  set,
-  debug,
-  interpolate,
-  Extrapolate,
-} from 'react-native-reanimated';
-import { State, PanGestureHandler } from 'react-native-gesture-handler';
+  translate,
+  useValue,
+  interpolateColor,
+} from 'react-native-redash';
+
+import { withDecay } from '../WithDecay';
 
 import { Header, HomeCarousel, ListHeader, ImageStrip } from '../components';
 
@@ -36,76 +46,126 @@ const { width, height } = Dimensions.get('window');
 
 const Home = ({ navigation }) => {
   const appContext = useContext(AppContext);
+  const [loading, setLoading] = useState(true);
+  const [height, setHeight] = useState(0);
   const styles = createStyles();
 
-  // Animation Values and functions
-  let opacity = new Value(1);
-  let translationX = useRef(new Value(0)).current;
+  useEffect(() => {
+    if (appContext) {
+      setLoading(false);
+    }
+  }, [appContext]);
 
-  let translationY = useRef(new Value(0)).current;
-  let offsetX = new Value(0);
-  let offsetY = useRef(new Value(0)).current;
-  let state = useRef(new Value(0)).current;
+  // Animation Declarations and functions
+  let opacity = useValue(1);
+  let opacity1 = useValue(0);
+  let bg = useValue(0);
 
-  const gestureEvent = event([
-    {
-      nativeEvent: {
-        state,
-        translationX,
-        translationY,
-      },
-    },
-  ]);
+  const {
+    gestureHandler,
+    translation,
+    velocity,
+    state,
+  } = usePanGestureHandler();
 
-  let transY = diffClamp(
-    cond(
-      eq(state, State.ACTIVE),
-      add(offsetY, translationY),
-      set(offsetY, add(offsetY, translationY))
-    ),
-    -hp('45%'),
-    0
-  );
+  const translateY = withDecay({
+    value: translation.y,
+    velocity: velocity.y,
+    state,
+  });
+
+  // let transY = diffClamp(translateY, -hp('45%'), 0);
+  let transY = diffClamp(translateY, -15000, 0);
 
   opacity = interpolate(transY, {
-    inputRange: [-hp('30%'), 0],
+    inputRange: [-height * 0.45, 0],
     outputRange: [0, 1],
     extrapolate: Extrapolate.CLAMP,
   });
 
-  return (
-    <View style={styles.pageContainer}>
-      <View style={{ zIndex: 10000 }}>
-        <Header navigation={navigation} />
-      </View>
+  opacity1 = interpolate(transY, {
+    inputRange: [-height * 0.45, -height * 0.42],
+    outputRange: [1, 0],
+    extrapolate: Extrapolate.CLAMP,
+  });
 
-      <PanGestureHandler
-        onHandlerStateChange={gestureEvent}
-        onGestureEvent={gestureEvent}
-      >
-        <Animated.View
-          style={[
-            { ...StyleSheet.absoluteFillObject },
-            {
-              marginTop: appContext.offerImages.length > 0 ? 0 : hp('15%'),
-              borderWidth: 1,
-            },
-            {
-              transform: [{ translateY: transY }],
-            },
-          ]}
+  bg = interpolateColor(transY, {
+    inputRange: [-height * 0.45, -height * 0.42],
+    outputRange: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
+    extrapolate: Extrapolate.CLAMP,
+  });
+
+  // END - Animation Declarations and functions
+
+  return (
+    <Fragment>
+      {loading && (
+        <View
+          style={{
+            justifyContent: 'center',
+            // backgroundColor: 'blue',
+            alignItems: 'center',
+            flex: 1,
+          }}
         >
-          <Animated.View pointerEvents='auto' style={[{ opacity }]}>
-            <HomeCarousel data={appContext.offerImages} />
+          <ActivityIndicator />
+        </View>
+      )}
+      {!loading && (
+        <View
+          style={styles.pageContainer}
+          onLayout={(e) => setHeight(e.nativeEvent.layout.height)}
+        >
+          {/* Page Header Area */}
+          <Animated.View style={[{ zIndex: 10000 }, { backgroundColor: bg }]}>
+            <Header navigation={navigation} />
+          </Animated.View>
+          <Animated.View style={[{ opacity: opacity1, zIndex: 10000 }]}>
+            <ListHeader
+              categories={appContext.categories}
+              images={appContext.offerImages}
+            />
           </Animated.View>
 
-          <View>
-            <ListHeader categories={appContext.categories} />
-            <ImageStrip images={appContext.offerImages} />
-          </View>
-        </Animated.View>
-      </PanGestureHandler>
-    </View>
+          {/* Content Area */}
+          <PanGestureHandler {...gestureHandler} minDist={20}>
+            <Animated.View
+              style={[
+                {
+                  ...StyleSheet.absoluteFillObject,
+                },
+                {
+                  marginTop: appContext.offerImages.length > 0 ? 0 : hp('15%'),
+                },
+                {
+                  transform: [{ translateY: transY }],
+                },
+              ]}
+            >
+              {/* Carousel Area */}
+
+              <Animated.View pointerEvents='auto' style={[{ opacity }]}>
+                {appContext.offerImages.length > 0 && (
+                  <HomeCarousel data={appContext.offerImages} />
+                )}
+              </Animated.View>
+
+              {/* ImageStrip Area */}
+
+              <Animated.View style={[{ opacity }]}>
+                <ListHeader
+                  categories={appContext.categories}
+                  images={appContext.offerImages}
+                />
+              </Animated.View>
+              <View>
+                <ImageStrip images={appContext.offerImages} />
+              </View>
+            </Animated.View>
+          </PanGestureHandler>
+        </View>
+      )}
+    </Fragment>
   );
 };
 

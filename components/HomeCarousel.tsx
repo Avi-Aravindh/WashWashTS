@@ -58,7 +58,10 @@ const HomeCarousel = ({ data }: HomeCarouselProps) => {
           source={item.image}
           resizeMode='cover'
           onLoadStart={() => setLoading(true)}
-          onLoadEnd={() => setLoading(false)}
+          onLoadEnd={() => {
+            console.log('load ends');
+            setLoading(false);
+          }}
         >
           {loading && <ActivityIndicator />}
           {!loading && (
@@ -91,32 +94,6 @@ const HomeCarousel = ({ data }: HomeCarouselProps) => {
     );
   };
 
-  //   const getPagination = () => {
-  //     return (
-  //       <Pagination
-  //         dotsLength={offerImages.length}
-  //         activeDotIndex={activeImageIndex}
-  //         containerStyle={{
-  //           backgroundColor: "#fff",
-  //         }}
-  //         dotStyle={{
-  //           width: 8,
-  //           height: 8,
-  //           borderRadius: 5,
-  //           marginHorizontal: 3,
-  //           backgroundColor: "#45DDE6",
-  //         }}
-  //         inactiveDotStyle={
-  //           {
-  //             // Define styles for inactive dots here
-  //           }
-  //         }
-  //         inactiveDotOpacity={0.4}
-  //         inactiveDotScale={0.6}
-  //       ></Pagination>
-  //     );
-  //   };
-
   return (
     <Carousel
       layout={'default'}
@@ -125,8 +102,8 @@ const HomeCarousel = ({ data }: HomeCarouselProps) => {
       renderItem={_renderImage}
       itemWidth={ITEM_WIDTH}
       sliderWidth={SLIDER_WIDTH}
-      autoplay={true}
-      autoplayInterval={5000}
+      autoplay={false}
+      // autoplayInterval={5000}
       onSnapToItem={(index) => setActiveImageIndex(index)}
     />
   );
