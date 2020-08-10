@@ -1,13 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, FunctionComponent } from 'react';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import {
   View,
   Text,
-  Image,
   ImageBackground,
   Dimensions,
-  Animated,
   ActivityIndicator,
 } from 'react-native';
 import { createStyles } from '../styles';
@@ -17,27 +15,22 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+import { Item } from '../context/AppProvider';
+
 import Button from './Button';
 
-interface offers {
-  title: string;
-  location: string;
-  price: string;
-  image: any;
-}
-
 interface HomeCarouselProps {
-  data: offers[];
+  data: Item[];
 }
 
-const HomeCarousel = ({ data }: HomeCarouselProps) => {
+const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
   const styles = createStyles();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 1);
-  const ITEM_HEIGHT = hp('60%');
+  const ITEM_HEIGHT = hp('50%');
 
   const _renderImage = ({ item, index }) => {
     return (

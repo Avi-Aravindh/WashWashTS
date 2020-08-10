@@ -1,78 +1,129 @@
 import React, { useState, useEffect } from 'react';
 import AppContext from './AppContext';
 
-export interface category {
-  id: string;
-  title: string;
+export interface Category {
+  categoryId: string;
+  categoryTitle: string;
 }
 
-export interface offers {
+export interface Item {
   title: string;
   location: string;
   price: string;
   image: any;
-  category: category;
+  category: Category;
 }
 
-const tempAppCategories: category[] = [
-  { id: 'Alla', title: 'Alla' },
-  { id: 'Överdel', title: 'Överdel' },
-  { id: 'Underdel', title: 'Underdel' },
-  { id: 'Acessoarer', title: 'Acessoarer' },
-  { id: 'Högtid', title: 'Högtid' },
+const tempAppCategories: Category[] = [
+  { categoryId: '0', categoryTitle: 'Alla' },
+  { categoryId: '1', categoryTitle: 'Överdel' },
+  { categoryId: '2', categoryTitle: 'Underdel' },
+  { categoryId: '3', categoryTitle: 'Acessoarer' },
+  { categoryId: '4', categoryTitle: 'Högtid' },
 ];
 
-const tempOfferImages = [
+const tempOfferItems = [
   {
     title: 'Byxor',
     location: 'default',
     price: '80 :- st',
     image: require('../assets/tempOfferImages/frank-flores-394933.jpg'),
-    category: tempAppCategories.find((category) => (category.id = 'Överdel')),
+    category: tempAppCategories.find((category) => category.categoryId == '0'),
   },
   {
     title: 'Kulörtvätt',
     location: 'default',
     price: '60:-',
     image: require('../assets/tempOfferImages/francis-duval-37755.jpg'),
-    category: tempAppCategories.find((category) => (category.id = 'Underdel')),
+    category: tempAppCategories.find((category) => category.categoryId == '1'),
   },
   {
     title: 'Klänning',
     location: 'default',
     price: '250:-',
     image: require('../assets/tempOfferImages/flaunter-com-178022.jpg'),
-    category: tempAppCategories.find(
-      (category) => (category.id = 'Acessoarer')
-    ),
+    category: tempAppCategories.find((category) => category.categoryId == '2'),
   },
   {
     title: 'Kostym',
     location: 'default',
     price: '230:-',
     image: require('../assets/tempOfferImages/soroush-karimi-387509.jpg'),
-    category: tempAppCategories.find((category) => (category.id = 'Högtid')),
+    category: tempAppCategories.find((category) => category.categoryId == '3'),
+  },
+  {
+    title: 'Byxor',
+    location: 'default',
+    price: '80 :- st',
+    image: require('../assets/tempOfferImages/alexandra-gorn-260989.jpg'),
+    category: tempAppCategories.find((category) => category.categoryId == '0'),
+  },
+  {
+    title: 'Kulörtvätt',
+    location: 'default',
+    price: '60:-',
+    image: require('../assets/tempOfferImages/dmitriy-ilkevich-437760.jpg'),
+    category: tempAppCategories.find((category) => category.categoryId == '1'),
+  },
+  {
+    title: 'Klänning',
+    location: 'default',
+    price: '250:-',
+    image: require('../assets/tempOfferImages/michael-frattaroli-221247.jpg'),
+    category: tempAppCategories.find((category) => category.categoryId == '2'),
+  },
+  {
+    title: 'Kostym',
+    location: 'default',
+    price: '230:-',
+    image: require('../assets/tempOfferImages/rui-silvestre-429616.jpg'),
+    category: tempAppCategories.find((category) => category.categoryId == '3'),
+  },
+  {
+    title: 'Klänning',
+    location: 'default',
+    price: '250:-',
+    image: require('../assets/tempOfferImages/tim-wright-512701.jpg'),
+    category: tempAppCategories.find((category) => category.categoryId == '4'),
+  },
+  {
+    title: 'Kostym',
+    location: 'default',
+    price: '230:-',
+    image: require('../assets/tempOfferImages/william-stitt-196804.jpg'),
+    category: tempAppCategories.find((category) => category.categoryId == '0'),
   },
 ];
 
 const AppProvider = (props) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
-  const [offerImages, setOfferImages] = useState<offers[]>([]);
-  const [categories, setCategories] = useState<category[]>([]);
+  const [allItems, setAllItems] = useState<Item[]>([]);
+  const [offerItems, setOfferItems] = useState<Item[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category>();
 
   useEffect(() => {
     setTimeout(() => {
-      setOfferImages(tempOfferImages);
+      setAllItems(tempOfferItems);
+      setOfferItems(tempOfferItems.slice(0, 4));
       setCategories(tempAppCategories);
+      setSelectedCategory(tempAppCategories[0]);
     }, 3000);
   }, []);
+
+  const updateSelectedCategory = (category: Category) => {
+    setSelectedCategory(category);
+  };
 
   return (
     <AppContext.Provider
       value={{
         isUserLoggedIn: isUserLoggedIn,
-        offerImages: offerImages,
+        allItems: allItems,
+        offerItems: offerItems,
         categories: categories,
+        selectedCategory: selectedCategory,
+        updateSelectedCategory: updateSelectedCategory,
       }}
     >
       {props.children}

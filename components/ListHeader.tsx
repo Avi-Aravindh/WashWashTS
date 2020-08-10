@@ -1,41 +1,26 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext, useState } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  Dimensions,
-  StyleSheet,
-  ImageBackground,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
+import React, { useContext, useState, FunctionComponent } from 'react';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { createStyles } from '../styles';
-
-interface category {
-  id: string;
-  title: string;
-}
-
-interface image {
-  title: string;
-  location: string;
-  price: string;
-  image: any;
-  category: category;
-}
+import { Category } from '../context/AppProvider';
+import AppContext from '../context/AppContext';
 
 interface ListHeaderProps {
-  categories: category[];
-  images: image[];
+  categories: Category[];
+  selectedCategory: Category;
+  updateSelectedCategory: (category: Category) => void;
 }
 
-const { width, height } = Dimensions.get('window');
-const ListHeader = ({ categories, images }: ListHeaderProps) => {
-  //   const appContext = useContext(AppContext);
+// const ListHeader: FunctionComponent<ListHeaderProps> = ({
+//   categories,
+//   selectedCategory,
+//   updateSelectedCategory,
+// }) => {
+const ListHeader = () => {
   const styles = createStyles();
-  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  const { categories, selectedCategory, updateSelectedCategory } = useContext(
+    AppContext
+  );
 
   return (
     <View style={{ backgroundColor: 'white', zIndex: 15000 }}>
@@ -54,7 +39,7 @@ const ListHeader = ({ categories, images }: ListHeaderProps) => {
             <TouchableOpacity
               key={index}
               onPress={() => {
-                setCurrentCategoryIndex(index);
+                updateSelectedCategory(category);
               }}
               style={{
                 marginRight: 15,
@@ -72,358 +57,18 @@ const ListHeader = ({ categories, images }: ListHeaderProps) => {
                 <Text
                   style={[
                     styles.overlayButtonText,
-                    index == currentCategoryIndex ? { color: 'red' } : '',
+                    selectedCategory &&
+                    category.categoryId === selectedCategory.categoryId
+                      ? { color: 'red' }
+                      : '',
                   ]}
                 >
-                  {category.title}
+                  {category.categoryTitle}
                 </Text>
               </View>
             </TouchableOpacity>
           ))}
       </ScrollView>
-
-      {/* <View
-        style={{
-          width: width,
-          paddingLeft: width * 0.04,
-          paddingRight: width * 0.04,
-          paddingTop: height * 0.01,
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          flexBasis: 1,
-        }}
-      >
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[2].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[0].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[1].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                // marginTop: height * 0.01,
-                marginTop: -195,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[3].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[2].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[0].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[1].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                // marginTop: height * 0.01,
-                marginTop: -195,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[3].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[2].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[0].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[1].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                // marginTop: height * 0.01,
-                marginTop: -195,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[3].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[2].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[0].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[1].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                // marginTop: height * 0.01,
-                marginTop: -195,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[3].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[2].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[0].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[1].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 200,
-                marginRight: width * 0.01,
-                // marginTop: height * 0.01,
-                marginTop: -195,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-
-        {images.length > 0 && (
-          <TouchableOpacity
-            onPress={() => Alert.alert('shared content animation to next page')}
-          >
-            <ImageBackground
-              source={images[3].image}
-              style={{
-                width: (width - width * 0.1) / 2,
-                height: 400,
-                marginLeft: width * 0.01,
-                marginTop: height * 0.01,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        )}
-      </View> */}
     </View>
   );
 };

@@ -1,13 +1,13 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { ActivityIndicator } from "react-native";
-import { StyleSheet, Text, View } from "react-native";
-import { AppLoading } from "expo";
-import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import AppProvider from "./context/AppProvider";
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { AppLoading } from 'expo';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import AppProvider from './context/AppProvider';
 
-import { createStyles } from "./styles";
+import { createStyles } from './styles';
 
 import {
   useFonts,
@@ -15,14 +15,14 @@ import {
   OpenSans_400Regular,
   OpenSans_600SemiBold,
   OpenSans_700Bold,
-} from "@expo-google-fonts/open-sans";
-import AppContext from "./context/AppContext";
+} from '@expo-google-fonts/open-sans';
+import AppContext from './context/AppContext';
 
 // Screens
-import { Home } from "./screens";
+import { Home, Home1 } from './screens';
 
 //Components
-import { DrawerContent } from "./components";
+import { DrawerContent } from './components';
 
 export default function App() {
   const styles = createStyles();
@@ -45,9 +45,9 @@ export default function App() {
             {fontsLoaded && (
               <Drawer.Navigator
                 drawerContent={() => <DrawerContent />}
-                initialRouteName="home"
+                initialRouteName='home'
               >
-                <Drawer.Screen name="home" component={Home} />
+                <Drawer.Screen name='home' component={Home} />
               </Drawer.Navigator>
             )}
           </NavigationContainer>

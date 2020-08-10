@@ -57,6 +57,6 @@ export const withDecay = (config: WithDecayParams) => {
       decay(clock, decayState, { deceleration }),
       cond(decayState.finished, finishDecay),
     ]),
-    [debug('position', decayState.position)],
+    decayState.position,
   ]);
 };
