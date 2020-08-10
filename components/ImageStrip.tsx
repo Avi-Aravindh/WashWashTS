@@ -11,7 +11,8 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-const { width, height } = Dimensions.get('window');
+import { createStyles } from '../styles';
+import { useNavigation } from '@react-navigation/native';
 
 import { Category, Item } from '../context/AppProvider';
 
@@ -19,8 +20,11 @@ interface ImageStripProps {
   allItems: Item[];
   selectedCategory: Category;
 }
+const { width, height } = Dimensions.get('window');
+const styles = createStyles();
 
 const imageHeights = [200, 225, 250, 275, 300, 325, 350, 375];
+
 const ImageStrip: FunctionComponent<ImageStripProps> = ({
   allItems,
   selectedCategory,
@@ -29,8 +33,9 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
   const [itemSet1, setItemSet1] = useState<Item[]>([]);
   const [itemSet2, setItemSet2] = useState<Item[]>([]);
 
+  const navigation = useNavigation();
+
   useEffect(() => {
-    console.log('category changed', selectedCategory);
     handleCategoryChange();
   }, [selectedCategory]);
 
@@ -58,6 +63,44 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
     });
   };
 
+  const renderImage = (image: Item, index: number) => {
+    return (
+      <TouchableOpacity
+        key={index}
+        activeOpacity={0.8}
+        style={{
+          height: imageHeights[Math.floor(Math.random() * imageHeights.length)],
+          marginTop: height * 0.01,
+        }}
+        onPress={() => navigation.navigate('itemDetails', { item: image })}
+      >
+        <ImageBackground
+          source={image.image}
+          onLoadStart={() => setLoading(true)}
+          onLoadEnd={() => {
+            setLoading(false);
+          }}
+          style={{
+            width: (width - width * 0.12) / 2,
+            flex: 1,
+            paddingBottom: 10,
+            paddingLeft: 10,
+            justifyContent: 'flex-end',
+          }}
+          resizeMode='cover'
+        >
+          {loading && <ActivityIndicator />}
+          {!loading && (
+            <View>
+              <Text style={styles.welcomeText}>{image.title}</Text>
+              <Text style={styles.dealHeaderText}>{image.price}</Text>
+            </View>
+          )}
+        </ImageBackground>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View
       style={{
@@ -76,26 +119,7 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
           flexDirection: 'column',
         }}
       >
-        {itemSet1.map((image, index) => (
-          <TouchableOpacity
-            key={index}
-            style={{
-              height:
-                imageHeights[Math.floor(Math.random() * imageHeights.length)],
-              marginTop: height * 0.01,
-            }}
-          >
-            <ImageBackground
-              source={image.image}
-              onLoad={() => <ActivityIndicator />}
-              style={{
-                width: (width - width * 0.12) / 2,
-                flex: 1,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        ))}
+        {itemSet1.map((image, index) => renderImage(image, index))}
       </View>
 
       <View
@@ -105,25 +129,7 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
           flexDirection: 'column',
         }}
       >
-        {itemSet2.map((image, index) => (
-          <TouchableOpacity
-            key={index}
-            style={{
-              height:
-                imageHeights[Math.floor(Math.random() * imageHeights.length)],
-              marginTop: height * 0.01,
-            }}
-          >
-            <ImageBackground
-              source={image.image}
-              style={{
-                width: (width - width * 0.12) / 2,
-                flex: 1,
-              }}
-              resizeMode='cover'
-            />
-          </TouchableOpacity>
-        ))}
+        {itemSet2.map((image, index) => renderImage(image, index))}
       </View>
     </View>
   );

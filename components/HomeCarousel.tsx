@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { createStyles } from '../styles';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   widthPercentageToDP as wp,
@@ -27,6 +28,7 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
   const styles = createStyles();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 1);
@@ -52,7 +54,6 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
           resizeMode='cover'
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => {
-            console.log('load ends');
             setLoading(false);
           }}
         >
@@ -77,7 +78,9 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
                 <Button
                   type='overlay'
                   text='Lägg till'
-                  onPress={() => alert('shared content animation')}
+                  onPress={() =>
+                    navigation.navigate('itemDetails', { item: item })
+                  }
                 />
               </View>
             </View>

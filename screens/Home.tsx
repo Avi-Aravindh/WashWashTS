@@ -24,15 +24,15 @@ import { diffClamp, interpolateColor } from 'react-native-redash';
 
 import { withDecay } from '../WithDecay';
 
-import { Header, HomeCarousel, ListHeader, ImageStrip } from '../components';
+import {
+  DrawerHeader,
+  HomeCarousel,
+  ListHeader,
+  ImageStrip,
+} from '../components';
 
 import withAppContext from '../context/withAppContext';
 import { createStyles } from '../styles';
-
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
 
 const { width, height } = Dimensions.get('window');
 
@@ -122,7 +122,7 @@ class Home extends React.Component<HomeProps, HomeState> {
                 { backgroundColor: this.backgroundColor },
               ]}
             >
-              <Header navigation={this.props.navigation} />
+              <DrawerHeader navigation={this.props.navigation} />
             </Animated.View>
             <Animated.View style={[{ opacity: this.opacity1, zIndex: 10000 }]}>
               <ListHeader />
@@ -145,7 +145,7 @@ class Home extends React.Component<HomeProps, HomeState> {
                       this.props.context &&
                       this.props.context.offerItems.length > 0
                         ? 0
-                        : hp('15%'),
+                        : height * 0.15,
                   },
                   {
                     transform: [{ translateY: this.transY }],
@@ -172,7 +172,9 @@ class Home extends React.Component<HomeProps, HomeState> {
                 <View
                   style={{ flex: 0 }}
                   onLayout={(e) =>
-                    this.contentHeight.setValue(e.nativeEvent.layout.height)
+                    this.contentHeight.setValue(
+                      Math.max(e.nativeEvent.layout.height, height * 0.5)
+                    )
                   }
                 >
                   <ImageStrip
