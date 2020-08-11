@@ -5,3 +5,7 @@ export { default as HomeCarousel } from './HomeCarousel';
 export { default as Button } from './Button';
 export { default as ListHeader } from './ListHeader';
 export { default as ImageStrip } from './ImageStrip';
+export { default as ItemCounter } from './ItemCounter';
+export { default as HeaderCart } from './HeaderCart';
+export { default as Stepper } from './Stepper';
+export { default as CustomBackButton } from './CustomBackButton';

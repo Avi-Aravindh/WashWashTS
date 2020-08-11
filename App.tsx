@@ -37,16 +37,39 @@ export default function App() {
     OpenSans_700Bold,
   });
 
+  const config = {
+    animation: 'spring',
+    config: {
+      stiffness: 1000,
+      damping: 500,
+      mass: 3,
+      overshootClamping: false,
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 0.01,
+    },
+  };
+
   function HomeStack() {
     return (
-      <Stack.Navigator
-        initialRouteName='home'
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name='home' component={Home} />
-        <Stack.Screen name='itemDetails' component={ItemDetails} />
+      <Stack.Navigator initialRouteName='home'>
+        <Stack.Screen
+          name='home'
+          component={Home}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name='itemDetails'
+          component={ItemDetails}
+          options={{
+            transitionSpec: {
+              open: config,
+              close: config,
+            },
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name='cart' component={Cart} />
       </Stack.Navigator>
     );

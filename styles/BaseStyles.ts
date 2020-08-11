@@ -1,16 +1,17 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-export const dimensions = {
-  fullHeight: Dimensions.get('window').height,
-  fullWidth: Dimensions.get('window').width,
-};
+const { height, width } = Dimensions.get('window');
 
 export const colors = {
   PRIMARY: '#45DDE6',
   SECONDARY_TEXT: '#858585',
   INSTRUCTIONS_TEXT: '#4A4A4A',
-  INPUT_TEXT: '#ACACAC',
+  INFORMATION_TEXT: '#7F7F7F',
+  INPUT_TEXT: '#888888',
   INPUT_BORDER: '#DBDBDB',
+  SEPARATOR_BORDER: '#F2F2F2',
+  CART_BACKGROUND: '#D58936',
+  SEPARATOR_DOT: '#D8D8D8',
 };
 
 export const fontFamilies = {
@@ -25,14 +26,39 @@ export const fontSizes = {
   md: 14,
   lg: 16,
   vlg: 20,
-  vvlg: 22,
+  xl: 24,
 };
 
 const baseStyles = {
+  zIndexHighest: {
+    zIndex: 1000,
+  },
+
+  separator: {
+    width: width * 0.9,
+    marginTop: 20,
+    borderWidth: 1,
+    borderColor: colors.SEPARATOR_BORDER,
+    height: 1,
+  },
+
+  stepperSeparator: {
+    width: 6,
+    height: 6,
+    borderRadius: 50,
+    backgroundColor: '#000',
+  },
+
+  stepperDot: {
+    width: 50,
+    height: 1,
+    backgroundColor: colors.SEPARATOR_DOT,
+  },
+
   pageContainer: {
     backgroundColor: '#fff',
     flex: 1,
-    width: dimensions.fullWidth,
+    width: width,
   },
 
   sectionContainer: {
@@ -41,14 +67,59 @@ const baseStyles = {
     paddingBottom: 30,
   },
 
-  fullWidthContainer: {
-    width: dimensions.fullWidth,
+  widthContainer: {
+    width: width,
     alignItems: 'center',
   },
 
   actionContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+
+  detailsImageContainer: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0,
+    height: height * 0.35,
+    width: width,
+  },
+
+  detailsContainer: {
+    position: 'absolute',
+    marginTop: height * 0.38,
+    paddingLeft: width * 0.05,
+  },
+
+  cartCountContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 15,
+    height: 15,
+    backgroundColor: colors.CART_BACKGROUND,
+    borderRadius: 50,
+    zIndex: 10000,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stepperContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: width,
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+
+  checkoutTextContainer: {
+    marginTop: 10,
+    width: width,
+    paddingLeft: width * 0.05,
+    paddingRight: width * 0.05,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
   headerText: {
@@ -63,6 +134,20 @@ const baseStyles = {
     color: colors.SECONDARY_TEXT,
   },
 
+  informationText: {
+    fontFamily: fontFamilies.OpenSansRegular,
+    fontSize: fontSizes.md,
+    color: colors.INFORMATION_TEXT,
+    marginTop: 10,
+    width: width * 0.8,
+  },
+
+  instructionsHeaderText: {
+    fontFamily: fontFamilies.OpenSansLight,
+    fontSize: fontSizes.xl,
+    color: colors.INSTRUCTIONS_TEXT,
+  },
+
   instructionText: {
     fontFamily: fontFamilies.OpenSansLight,
     fontSize: fontSizes.vlg,
@@ -74,12 +159,18 @@ const baseStyles = {
     fontSize: fontSizes.lg,
     color: '#fff',
     marginBottom: 10,
+    textShadowColor: '#666',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
 
   welcomeText: {
     fontFamily: fontFamilies.OpenSansRegular,
-    fontSize: fontSizes.vvlg,
+    fontSize: fontSizes.xl,
     color: '#fff',
+    textShadowColor: '#666',
+    textShadowOffset: { width: -1, height: 0 },
+    textShadowRadius: 10,
   },
 
   inputLabelText: {
@@ -95,6 +186,12 @@ const baseStyles = {
     color: colors.INPUT_TEXT,
     borderBottomWidth: 1,
     borderColor: colors.INPUT_BORDER,
+    textAlign: 'center',
+  },
+
+  cartCountText: {
+    fontSize: 8,
+    fontWeight: 'bold',
   },
 
   primaryButton: {
@@ -133,6 +230,30 @@ const baseStyles = {
     fontSize: fontSizes.md,
   },
 
+  counterButton: {
+    height: 25,
+    width: 25,
+    borderRadius: 50,
+    backgroundColor: colors.PRIMARY,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+
+  counterButtonText: {
+    color: '#333',
+    fontSize: fontSizes.vlg,
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  cartCostHeaderText: {
+    fontSize: fontSizes.xl,
+    fontFamily: fontFamilies.OpenSansRegular,
+    color: colors.PRIMARY,
+  },
+
   overlayButton: {
     width: 150,
     height: 50,
@@ -149,6 +270,12 @@ const baseStyles = {
     color: '#333',
     fontFamily: fontFamilies.OpenSansSemiBold,
     fontSize: fontSizes.md,
+  },
+
+  detailsImage: {
+    height: undefined,
+    width: undefined,
+    flex: 1,
   },
 
   imageFullScreenBackground: {

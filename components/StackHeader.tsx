@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { createStyles } from '../styles';
 import { colors } from '../styles/BaseStyles';
+import { HeaderCart } from '../components';
 
 interface DrawerHeaderProps {
   title: String;
@@ -39,12 +40,7 @@ const DrawerHeader: FunctionComponent<DrawerHeaderProps> = ({ title }) => {
         <Text style={[styles.headerText, { color: colors.PRIMARY }]}>
           {title}
         </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('cart')}>
-          <Image
-            source={require('../assets/checkout.png')}
-            style={{ marginRight: wp('5%'), height: 35 }}
-          />
-        </TouchableOpacity>
+        <HeaderCart />
       </View>
     </View>
   );

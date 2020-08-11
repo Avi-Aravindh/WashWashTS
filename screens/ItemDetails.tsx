@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   SafeAreaView,
   View,
@@ -6,62 +6,90 @@ import {
   Image,
   Dimensions,
   StyleSheet,
+  Platform,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { TouchableOpacity, TextInput } from 'react-native-gesture-handler';
-import { StackHeader } from '../components';
+import { StackHeader, ItemCounter, Button } from '../components';
+import { isItemInCart } from '../utilities';
 import { createStyles } from '../styles';
+import AppContext from '../context/AppContext';
+import { Item } from '../context/AppProvider';
 
 const styles = createStyles();
 const { width, height } = Dimensions.get('window');
 
 const ItemDetails = () => {
   const navigation = useNavigation();
+  const isFocused = navigation.isFocused();
+  console.log('focussed');
   const route = useRoute();
   const [item, setItem] = useState(route.params.item);
-  const [quantity, setQuantity] = useState('');
-  console.log('navigtaion', navigation);
-  console.log('route', route);
+  const [quantity, setQuantity] = useState(1);
+  const appContext = useContext(AppContext);
+
+  useEffect(() => {
+    console.log('focus');
+    if (!isItemInCart(appContext.cart, item)) {
+      setQuantity(0);
+      return;
+    } else {
+      setQuantity(
+        appContext.cart.cartItems.find(
+          (cartItem: Item) => cartItem.itemId === item.itemId
+        ).quantity
+      );
+    }
+  }, [navigation.isFocused(), appContext.cart, item]);
 
   return (
-    <View style={[styles.pageContainer]}>
-      <View style={{ zIndex: 1000 }}>
+    <ScrollView style={[styles.pageContainer]}>
+      <View style={styles.zIndexHighest}>
         <StackHeader title={item.title} />
       </View>
-      <View
-        style={[
-          StyleSheet.absoluteFillObject,
-          {
-            height: height * 0.4,
-            width: width,
-          },
-        ]}
-      >
+      <View style={[styles.detailsImageContainer]}>
         <Image
           source={item.image}
-          style={{ height: undefined, width: undefined, flex: 1 }}
+          style={[styles.detailsImage]}
           resizeMode='cover'
         />
       </View>
-      <View
-        style={{
-          position: 'absolute',
-          marginTop: height * 0.43,
-          borderWidth: 1,
-          paddingLeft: width * 0.05,
-        }}
-      >
-        <Text style={[styles.instructionText]}>{item.title}</Text>
-        <Text style={[styles.instructionText]}>{item.price} / kg</Text>
-        <Text style={[styles.desriptionText]}>information </Text>
-        <TextInput
-          style={{ width: 40, height: 20, borderColor: 'gray', borderWidth: 1 }}
-          keyboardType='numeric'
-          value={quantity}
-          onChange={(text) => setQuantity(text)}
-        ></TextInput>
+      <View style={styles.detailsContainer}>
+        <Text style={styles.instructionsHeaderText}>{item.title}</Text>
+        <Text style={[styles.desriptionText, { marginTop: 10 }]}>
+          {item.price} / kg
+        </Text>
+        <Text style={[styles.informationText]}>
+          Information text about the product and what to expect from getting
+          this servie.
+        </Text>
+
+        <View style={[styles.separator]} />
+        <View style={{ marginTop: 10 }}>
+          <Text style={[styles.desriptionText]}>Välj cirka vikt</Text>
+        </View>
+        <View style={{ marginTop: 20 }}>
+          <ItemCounter
+            initialCount={quantity}
+            onChange={(newCount) => setQuantity(newCount)}
+          />
+        </View>
+        <KeyboardAvoidingView
+          behavior={'position'}
+          style={{ position: 'absolute', bottom: height * -0.2, right: 10 }}
+        >
+          <Button
+            text='Lägg till'
+            type='primary'
+            disabled={!quantity}
+            onPress={() => {
+              appContext.updateCart({ ...item, quantity: quantity });
+            }}
+          />
+        </KeyboardAvoidingView>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

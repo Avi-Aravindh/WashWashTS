@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, Image, Alert } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -8,10 +8,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { createStyles } from '../styles';
 import { colors } from '../styles/BaseStyles';
+import AppContext from '../context/AppContext';
+import { HeaderCart } from '../components';
 
 const DrawerHeader = ({ navigation }) => {
   const styles = createStyles();
-
+  const appContext = useContext(AppContext);
   return (
     <View>
       <View
@@ -35,12 +37,7 @@ const DrawerHeader = ({ navigation }) => {
           style={{ height: 50, width: 50 }}
           resizeMode='contain'
         />
-        <TouchableOpacity onPress={() => navigation.navigate('cart')}>
-          <Image
-            source={require('../assets/checkout.png')}
-            style={{ marginRight: wp('5%'), height: 35 }}
-          />
-        </TouchableOpacity>
+        <HeaderCart />
       </View>
     </View>
   );
