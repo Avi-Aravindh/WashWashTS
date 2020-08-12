@@ -13,7 +13,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { createStyles } from '../styles';
 import AppContext from '../context/AppContext';
-import { CustomBackButton, Stepper, ItemCounter } from '../components';
+import { CustomBackButton, Stepper, ItemCounter, Button } from '../components';
 import { Item } from '../context/AppContext';
 
 const styles = createStyles();
@@ -21,10 +21,6 @@ const { width, height } = Dimensions.get('window');
 
 const Cart = () => {
   const navigation = useNavigation();
-  let parent = navigation.dangerouslyGetParent();
-  console.log('cart navifation', parent);
-  const route = useRoute();
-  console.log('cart navifation - route', route);
 
   const appContext = useContext(AppContext);
 
@@ -43,7 +39,10 @@ const Cart = () => {
 
   const renderItem = ({ item }: Item) => {
     return (
-      <View style={[styles.checkoutTextContainer, { marginTop: 20 }]}>
+      // <View style={[styles.checkoutTextContainer, { marginTop: 20 }]}>
+      <View
+        style={[styles.checkoutTextContainer, { height: 100, marginTop: 20 }]}
+      >
         <View style={{ width: width * 0.2, height: width * 0.2 }}>
           <Image
             source={item.image}
@@ -78,23 +77,39 @@ const Cart = () => {
             Antal varor
           </Text>
           <Text style={[styles.inputLabelText, { fontSize: 13 }]}>
-            {appContext.cart.length}
+            {appContext.cart.cartItems.length}
           </Text>
         </View>
 
         <View style={styles.checkoutTextContainer}>
           <Text style={[styles.cartCostHeaderText]}>Kostnad</Text>
-          <Text style={[styles.cartCostHeaderText]}>30:-</Text>
+          <Text style={[styles.cartCostHeaderText]}>
+            {appContext.totalCartCost}
+          </Text>
+        </View>
+        <View style={{ height: height * 0.45, marginTop: 20 }}>
+          <FlatList
+            data={appContext.cart.cartItems}
+            keyExtractor={(item) => item.itemId}
+            renderItem={renderItem}
+          />
         </View>
 
-        <FlatList
-          data={appContext.cart.cartItems}
-          keyExtractor={(item) => item.itemId}
-          renderItem={renderItem}
-        />
-        <TouchableOpacity onPress={() => appContext.emptyCart()}>
-          <Text>Delete</Text>
-        </TouchableOpacity>
+        <View
+          style={{
+            position: 'absolute',
+            marginTop: height * 0.6,
+            marginLeft: width * 0.5,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <Button
+            text='Checkout'
+            type='primary'
+            onPress={() => navigation.navigate('checkout')}
+          />
+        </View>
       </View>
     </SafeAreaView>
   );

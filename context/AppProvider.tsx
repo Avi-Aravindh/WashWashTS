@@ -71,7 +71,7 @@ const tempOfferItems = [
     itemId: '1',
     title: 'Byxor',
     location: 'default',
-    price: '80 :- st',
+    price: '80',
     image: require('../assets/tempOfferImages/frank-flores-394933.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '0'),
   },
@@ -79,7 +79,7 @@ const tempOfferItems = [
     itemId: '2',
     title: 'Kulörtvätt',
     location: 'default',
-    price: '60:-',
+    price: '60',
     image: require('../assets/tempOfferImages/francis-duval-37755.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '1'),
   },
@@ -87,7 +87,7 @@ const tempOfferItems = [
     itemId: '3',
     title: 'Klänning',
     location: 'default',
-    price: '250:-',
+    price: '250',
     image: require('../assets/tempOfferImages/flaunter-com-178022.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '2'),
   },
@@ -95,7 +95,7 @@ const tempOfferItems = [
     itemId: '4',
     title: 'Kostym',
     location: 'default',
-    price: '230:-',
+    price: '230',
     image: require('../assets/tempOfferImages/soroush-karimi-387509.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '3'),
   },
@@ -103,7 +103,7 @@ const tempOfferItems = [
     itemId: '5',
     title: 'Byxor1',
     location: 'default',
-    price: '80 :- st',
+    price: '80',
     image: require('../assets/tempOfferImages/alexandra-gorn-260989.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '0'),
   },
@@ -111,7 +111,7 @@ const tempOfferItems = [
     itemId: '6',
     title: 'Kulörtvätt1',
     location: 'default',
-    price: '60:-',
+    price: '60',
     image: require('../assets/tempOfferImages/dmitriy-ilkevich-437760.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '1'),
   },
@@ -119,7 +119,7 @@ const tempOfferItems = [
     itemId: '7',
     title: 'Klänning1',
     location: 'default',
-    price: '250:-',
+    price: '250',
     image: require('../assets/tempOfferImages/michael-frattaroli-221247.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '2'),
   },
@@ -127,7 +127,7 @@ const tempOfferItems = [
     itemId: '8',
     title: 'Kostym1',
     location: 'default',
-    price: '230:-',
+    price: '230',
     image: require('../assets/tempOfferImages/rui-silvestre-429616.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '3'),
   },
@@ -135,7 +135,7 @@ const tempOfferItems = [
     itemId: '9',
     title: 'Klänning1',
     location: 'default',
-    price: '250:-',
+    price: '250',
     image: require('../assets/tempOfferImages/tim-wright-512701.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '4'),
   },
@@ -143,7 +143,7 @@ const tempOfferItems = [
     itemId: '10',
     title: 'Kostym1',
     location: 'default',
-    price: '230:-',
+    price: '230',
     image: require('../assets/tempOfferImages/william-stitt-196804.jpg'),
     category: tempAppCategories.find((category) => category.categoryId == '0'),
   },
@@ -158,6 +158,7 @@ const AppProvider = (props) => {
 
   const [cart, setCart] = useState<Cart>({ cartItems: [] });
   const [totalCartCount, setTotalCartCount] = useState(0);
+  const [totalCartCost, setTotalCartCost] = useState(0);
 
   useEffect(() => {
     setAllItems(tempOfferItems);
@@ -174,11 +175,17 @@ const AppProvider = (props) => {
   }, []);
 
   useEffect(() => {
-    let total = 0;
+    let totalCount: number = 0;
+    let totalCost: number = 0;
+
     if (cart.cartItems) {
-      cart.cartItems.map((item) => (total = total + item.quantity));
+      cart.cartItems.map((item) => {
+        totalCount = totalCount + item.quantity;
+        totalCost = totalCost + Number(item.quantity) * Number(item.price);
+      });
     }
-    setTotalCartCount(total);
+    setTotalCartCount(totalCount);
+    setTotalCartCost(totalCost);
   }, [cart]);
 
   const _updateCart = async (cart) => {
@@ -259,6 +266,7 @@ const AppProvider = (props) => {
   const emptyCart = async () => {
     try {
       await AsyncStorage.clear();
+      _getCart();
     } catch (e) {
       console.log('error clearing cart');
     }
@@ -273,6 +281,7 @@ const AppProvider = (props) => {
         categories: categories,
         cart: cart,
         totalCartCount: totalCartCount,
+        totalCartCost: totalCartCost,
         selectedCategory: selectedCategory,
         updateSelectedCategory: updateSelectedCategory,
         updateCart: updateCart,

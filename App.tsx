@@ -20,7 +20,15 @@ import {
 import AppContext from './context/AppContext';
 
 // Screens
-import { Home, Home1, ItemDetails, Cart } from './screens';
+import {
+  Home,
+  ItemDetails,
+  Cart,
+  Checkout,
+  Payment,
+  Pickup,
+  Confirmation,
+} from './screens';
 
 //Components
 import { DrawerContent } from './components';
@@ -71,6 +79,10 @@ export default function App() {
           }}
         />
         <Stack.Screen name='cart' component={Cart} />
+        <Stack.Screen name='checkout' component={Checkout} />
+        <Stack.Screen name='payment' component={Payment} />
+        <Stack.Screen name='pickup' component={Pickup} />
+        <Stack.Screen name='confirmation' component={Confirmation} />
       </Stack.Navigator>
     );
   }

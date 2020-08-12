@@ -23,14 +23,12 @@ const { width, height } = Dimensions.get('window');
 const ItemDetails = () => {
   const navigation = useNavigation();
   const isFocused = navigation.isFocused();
-  console.log('focussed');
   const route = useRoute();
   const [item, setItem] = useState(route.params.item);
   const [quantity, setQuantity] = useState(1);
   const appContext = useContext(AppContext);
 
   useEffect(() => {
-    console.log('focus');
     if (!isItemInCart(appContext.cart, item)) {
       setQuantity(0);
       return;
