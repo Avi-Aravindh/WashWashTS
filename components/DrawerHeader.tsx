@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { createStyles } from '../styles';
 import { colors } from '../styles/BaseStyles';
 import AppContext from '../context/AppContext';
-import { HeaderCart } from '../components';
+import HeaderCart from './HeaderCart';
 
 const DrawerHeader = ({ navigation }) => {
   const styles = createStyles();

@@ -56,7 +56,7 @@ const Payment = () => {
           }}
         >
           <Button
-            text='Slutför 😊'
+            text='Leverans 👉🏼'
             type='primary'
             onPress={() => navigation.navigate('pickup')}
           />

@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { createStyles } from '../styles';
 import { colors } from '../styles/BaseStyles';
-import { HeaderCart } from '../components';
+import HeaderCart from './HeaderCart';
 
 interface DrawerHeaderProps {
   title: String;

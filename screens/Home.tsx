@@ -79,7 +79,7 @@ class Home extends React.Component<HomeProps, HomeState> {
     state: this.gestureState,
   });
 
-  transY = diffClamp(this.translateY, multiply(this.contentHeight, -1), 0);
+  transY = diffClamp(this.translateY, multiply(this.contentHeight, -0.8), 0);
 
   opacity = interpolate(this.transY, {
     inputRange: [-height * 0.45, 0],

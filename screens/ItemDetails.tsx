@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackHeader, ItemCounter, Button } from '../components';
-import { isItemInCart } from '../utilities';
+import { isItemInCart, getItemFromCart } from '../utilities';
 import { createStyles } from '../styles';
 import AppContext from '../context/AppContext';
 import { Item } from '../context/AppProvider';
@@ -22,10 +22,11 @@ const { width, height } = Dimensions.get('window');
 
 const ItemDetails = () => {
   const navigation = useNavigation();
-  const isFocused = navigation.isFocused();
+
   const route = useRoute();
   const [item, setItem] = useState(route.params.item);
   const [quantity, setQuantity] = useState(1);
+
   const appContext = useContext(AppContext);
 
   useEffect(() => {
@@ -78,9 +79,21 @@ const ItemDetails = () => {
           style={{ position: 'absolute', bottom: height * -0.2, right: 10 }}
         >
           <Button
-            text='Lägg till'
+            text={
+              quantity < getItemFromCart(appContext.cart, item).quantity
+                ? 'Uppdatera'
+                : 'Lägg till'
+            }
             type='primary'
-            disabled={!quantity}
+            disabled={
+              quantity === getItemFromCart(appContext.cart, item).quantity
+                ? true
+                : getItemFromCart(appContext.cart, item) === false
+                ? quantity === 0
+                  ? true
+                  : false
+                : false
+            }
             onPress={() => {
               appContext.updateCart({ ...item, quantity: quantity });
             }}
