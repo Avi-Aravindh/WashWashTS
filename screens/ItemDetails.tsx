@@ -11,6 +11,15 @@ import {
   ScrollView,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTimingTransition, useTransition } from 'react-native-redash';
+import Animated, {
+  Easing,
+  useCode,
+  cond,
+  eq,
+  set,
+  block,
+} from 'react-native-reanimated';
 import { StackHeader, ItemCounter, Button } from '../components';
 import { isItemInCart, getItemFromCart } from '../utilities';
 import { createStyles } from '../styles';
@@ -26,8 +35,13 @@ const ItemDetails = () => {
   const route = useRoute();
   const [item, setItem] = useState(route.params.item);
   const [quantity, setQuantity] = useState(1);
-
+  const [cartUpdated, setCartUpdated] = useState(0);
   const appContext = useContext(AppContext);
+
+  const cartUpdatedOpacity = useTimingTransition(cartUpdated, {
+    duration: 400,
+    easing: Easing.inOut(Easing.ease),
+  });
 
   useEffect(() => {
     if (!isItemInCart(appContext.cart, item)) {
@@ -40,7 +54,7 @@ const ItemDetails = () => {
         ).quantity
       );
     }
-  }, [navigation.isFocused(), appContext.cart, item]);
+  }, [appContext.cart, item]);
 
   return (
     <ScrollView style={[styles.pageContainer]}>
@@ -68,16 +82,46 @@ const ItemDetails = () => {
         <View style={{ marginTop: 10 }}>
           <Text style={[styles.desriptionText]}>Välj cirka vikt</Text>
         </View>
-        <View style={{ marginTop: 20 }}>
+        <View
+          style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center' }}
+        >
           <ItemCounter
             initialCount={quantity}
-            onChange={(newCount) => setQuantity(newCount)}
+            onChange={(newCount) => {
+              setCartUpdated(0);
+              setQuantity(newCount);
+            }}
           />
+
+          <Animated.View
+            style={[
+              styles.updateText,
+              { marginLeft: 20, opacity: cartUpdatedOpacity },
+            ]}
+          >
+            <Text style={styles.updateText}>kundvagn uppdaterad</Text>
+          </Animated.View>
         </View>
         <KeyboardAvoidingView
           behavior={'position'}
-          style={{ position: 'absolute', bottom: height * -0.2, right: 10 }}
+          contentContainerStyle={{
+            flexDirection: 'row',
+            width: width * 0.9,
+            justifyContent: 'flex-end',
+          }}
+          style={{
+            position: 'absolute',
+            bottom: height * -0.2,
+            right: 10,
+          }}
         >
+          {/* <Button
+            text='Vagn'
+            type='primary'
+            onPress={() => {
+              navigation.navigate('cart');
+            }}
+          /> */}
           <Button
             text={
               quantity < getItemFromCart(appContext.cart, item).quantity
@@ -96,6 +140,7 @@ const ItemDetails = () => {
             }
             onPress={() => {
               appContext.updateCart({ ...item, quantity: quantity });
+              setCartUpdated(1);
             }}
           />
         </KeyboardAvoidingView>

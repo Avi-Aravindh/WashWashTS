@@ -7,6 +7,7 @@ export const colors = {
   SECONDARY_TEXT: '#858585',
   INSTRUCTIONS_TEXT: '#4A4A4A',
   INFORMATION_TEXT: '#7F7F7F',
+  CART_UPDATED_TEXT: '#06EFA9',
   INPUT_TEXT: '#888888',
   INPUT_BORDER: '#DBDBDB',
   SEPARATOR_BORDER: '#F2F2F2',
@@ -140,6 +141,13 @@ const baseStyles = {
     color: colors.INFORMATION_TEXT,
     marginTop: 10,
     width: width * 0.8,
+  },
+
+  updateText: {
+    fontFamily: fontFamilies.OpenSansRegular,
+    fontSize: fontSizes.md,
+    color: colors.CART_UPDATED_TEXT,
+    textTransform: 'uppercase',
   },
 
   instructionsHeaderText: {

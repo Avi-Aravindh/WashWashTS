@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, FunctionComponent } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { CustomBackButton, Stepper, Button } from '../components';
 import { createStyles } from '../styles';
+import { TextInput } from 'react-native-gesture-handler';
 
 const styles = createStyles();
 const { width, height } = Dimensions.get('window');
@@ -23,7 +25,8 @@ const Pickup = () => {
     });
   }, [navigation]);
   return (
-    <View style={styles.pageContainer}>
+    <KeyboardAwareScrollView style={styles.pageContainer}>
+      {/* <View style={styles.pageContainer}> */}
       <Stepper totalPages={4} currentPage={2} />
       <View style={{ marginTop: height * 0.05 }}>
         <View
@@ -43,26 +46,49 @@ const Pickup = () => {
             adress
           </Text>
         </View>
-        <View style={{ height: height * 0.5 }}>
-          <Text>Form placeholder</Text>
+        <View
+          style={{
+            height: height * 0.5,
+            marginTop: 30,
+            width: width * 0.95,
+            marginLeft: width * 0.1,
+          }}
+        >
+          <TextInput
+            placeholder='Adress'
+            style={[styles.inputText, { marginTop: 40 }]}
+          />
+          <TextInput
+            placeholder='Adress'
+            style={[styles.inputText, { marginTop: 40 }]}
+          />
+          <TextInput
+            placeholder='Adress'
+            style={[styles.inputText, { marginTop: 40 }]}
+          />
+          <TextInput
+            placeholder='Adress'
+            style={[styles.inputText, { marginTop: 40 }]}
+          />
         </View>
         <View
           style={{
             position: 'absolute',
-            marginTop: height * 0.6,
+            marginTop: height * 0.63,
             marginLeft: width * 0.5,
             flexDirection: 'row',
             justifyContent: 'flex-end',
           }}
         >
           <Button
-            text='Nästa👉🏼'
+            text='Nästa  👉🏼'
             type='primary'
             onPress={() => navigation.navigate('payment')}
           />
         </View>
       </View>
-    </View>
+      {/* </View> */}
+    </KeyboardAwareScrollView>
   );
 };
 
