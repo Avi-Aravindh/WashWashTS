@@ -5,6 +5,9 @@ import { Asset } from 'expo-asset';
 import { Image } from 'react-native';
 import { preventAutoHide } from 'expo/build/launch/SplashScreen';
 
+export interface appChoices {
+  postCode: number;
+}
 export interface Category {
   categoryId: string;
   categoryTitle: string;
@@ -29,6 +32,10 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface Cart {
+  cartItems: CartItem[];
+}
+
 export interface UserInformation {
   name: string;
   address: string;
@@ -40,22 +47,29 @@ export interface UserInformation {
   verified: boolean;
 }
 
-export interface BillingInformation {}
-
-export interface DeliveryInformation {}
-
-export interface PickupInformation {}
-
-export interface Cart {
-  cartItems: CartItem[];
+export interface Order {
+  items: CartItem[];
+  addressInformation: Address;
+  billingInformation: Billing;
+  pickupInformation: Pickup;
 }
 
-export interface Order {
-  cartInformation: Cart;
-  userInformation: UserInformation;
-  billingInformation: BillingInformation;
-  deliveryInformation: DeliveryInformation;
-  pickupInformation: PickupInformation;
+export interface Address {
+  addressLine: string;
+  city: string;
+  floor: string;
+  doorNumber: string;
+  postCode: string;
+}
+
+export interface Billing {
+  name: string;
+  stripeCustomerId: string;
+}
+
+export interface Pickup {
+  date: Date;
+  time: string;
 }
 
 const tempAppCategories: Category[] = [
@@ -150,6 +164,8 @@ const tempOfferItems = [
 ];
 
 const AppProvider = (props) => {
+
+  const [postCode, setPostCode] = useState();
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
   const [allItems, setAllItems] = useState<Item[]>([]);
   const [offerItems, setOfferItems] = useState<Item[]>([]);
@@ -160,18 +176,23 @@ const AppProvider = (props) => {
   const [totalCartCount, setTotalCartCount] = useState(0);
   const [totalCartCost, setTotalCartCost] = useState(0);
 
+  const [address, setAddress] = useState<Address>({});
+
   useEffect(() => {
     setAllItems(tempOfferItems);
     setOfferItems(tempOfferItems.slice(0, 4));
     setCategories(tempAppCategories);
     setSelectedCategory(tempAppCategories[0]);
 
+    // load Cart from device memory
     (async function loadCart() {
       await _getCart();
     })();
-    // tempOfferItems.map((item) => {
-    //   Asset.fromModule(item.image).downloadAsync();
-    // });
+
+    // load address from device memory
+    (async function loadAddress() {
+      await _getAddress();
+    })();
   }, []);
 
   useEffect(() => {
@@ -188,34 +209,7 @@ const AppProvider = (props) => {
     setTotalCartCost(totalCost);
   }, [cart]);
 
-  const _updateCart = async (cart) => {
-    try {
-      let cartJSON = JSON.stringify(cart);
-      await AsyncStorage.setItem('@cart', cartJSON);
-    } catch (e) {
-      console.log('Error writing cart', e);
-    }
-  };
-
-  const _getCart = async () => {
-    let emptyCart: Cart = { cartItems: [] };
-
-    try {
-      let cartJSON = await AsyncStorage.getItem('@cart');
-
-      if (cartJSON) {
-        setCart(JSON.parse(cartJSON));
-      } else {
-        setCart(emptyCart);
-      }
-    } catch (e) {
-      console.log('Error reading cart', e);
-    }
-  };
-
-  const updateSelectedCategory = (category: Category) => {
-    setSelectedCategory(category);
-  };
+  // Cart Items
 
   const updateCart = (item: CartItem) => {
     let tempCart = { ...cart };
@@ -272,9 +266,76 @@ const AppProvider = (props) => {
     }
   };
 
+  const _updateCart = async (cart) => {
+    try {
+      let cartJSON = JSON.stringify(cart);
+      await AsyncStorage.setItem('@cart', cartJSON);
+    } catch (e) {
+      console.log('Error writing cart', e);
+    }
+  };
+
+  const _getCart = async () => {
+    let emptyCart: Cart = { cartItems: [] };
+
+    try {
+      let cartJSON = await AsyncStorage.getItem('@cart');
+
+      if (cartJSON) {
+        setCart(JSON.parse(cartJSON));
+      } else {
+        setCart(emptyCart);
+      }
+    } catch (e) {
+      console.log('Error reading cart', e);
+    }
+  };
+
+  // Address Methods
+  const updateAddress = (newAddress: Address) => {
+    _updateAddress(newAddress);
+  };
+
+  const _updateAddress = async (newAddress: Address) => {
+    try {
+      let addressJSON = JSON.stringify(newAddress);
+      await AsyncStorage.setItem('@address', addressJSON);
+      _getAddress();
+    } catch (e) {
+      console.log('Error writing address', e);
+    }
+  };
+
+  const _getAddress = async () => {
+    let emptyAddress: Address = {
+      addressLine: '',
+      city: '',
+      floor: '',
+      doorNumber: '',
+      postCode: '',
+    };
+
+    try {
+      let addressJSON = await AsyncStorage.getItem('@address');
+
+      if (addressJSON) {
+        setAddress(JSON.parse(addressJSON));
+      } else {
+        setAddress(emptyAddress);
+      }
+    } catch (e) {
+      console.log('Error reading addresss', e);
+    }
+  };
+
+  const updateSelectedCategory = (category: Category) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <AppContext.Provider
       value={{
+        postCode:postCode,
         isUserLoggedIn: isUserLoggedIn,
         allItems: allItems,
         offerItems: offerItems,
@@ -286,6 +347,9 @@ const AppProvider = (props) => {
         updateSelectedCategory: updateSelectedCategory,
         updateCart: updateCart,
         emptyCart: emptyCart,
+
+        address: address,
+        updateAddress: updateAddress,
       }}
     >
       {props.children}

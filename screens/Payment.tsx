@@ -43,8 +43,8 @@ const Payment = () => {
             leverans. Lätt som en plätt!
           </Text>
         </View>
-        <View style={{ height: height * 0.5 }}>
-          <Text>Form placeholder</Text>
+        <View style={{ height: height * 0.5, marginTop: 40 }}>
+          <Text>Hoping to have stripe and other payment options here</Text>
         </View>
         <View
           style={{

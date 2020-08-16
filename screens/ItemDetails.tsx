@@ -9,9 +9,11 @@ import {
   Platform,
   KeyboardAvoidingView,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTimingTransition, useTransition } from 'react-native-redash';
+
 import Animated, {
   Easing,
   useCode,
@@ -24,7 +26,7 @@ import { StackHeader, ItemCounter, Button } from '../components';
 import { isItemInCart, getItemFromCart } from '../utilities';
 import { createStyles } from '../styles';
 import AppContext from '../context/AppContext';
-import { Item } from '../context/AppProvider';
+import { Item, Address } from '../context/AppProvider';
 
 const styles = createStyles();
 const { width, height } = Dimensions.get('window');

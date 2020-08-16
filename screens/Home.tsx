@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { Fragment } from 'react';
+import React, { Fragment, ContextType } from 'react';
 import {
   View,
   StyleSheet,
@@ -36,18 +36,13 @@ import { createStyles } from '../styles';
 
 const { width, height } = Dimensions.get('window');
 
-interface HomeState {
-  loading: boolean;
-}
-
-interface HomeProps {}
-
-class Home extends React.Component<HomeProps, HomeState> {
+class Home extends React.Component {
   constructor(props: any) {
     super(props);
 
     this.state = {
       loading: false,
+      context: props.context,
     };
   }
 
@@ -97,6 +92,17 @@ class Home extends React.Component<HomeProps, HomeState> {
     inputRange: [-height * 0.45, -height * 0.42],
     outputRange: ['rgba(255,255,255,1)', 'rgba(255,255,255,0)'],
   });
+
+  componentDidMount() {
+    if (!this.props.context.postCode) {
+      console.log('whould navigate');
+      this.props.navigation.navigate('postCodeModal');
+    }
+  }
+
+  componentDidUpdate() {
+    // this.props.navigation.navigate('cart');
+  }
 
   render() {
     return (

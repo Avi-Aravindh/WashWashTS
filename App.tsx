@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { AppLoading } from 'expo';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import AppProvider from './context/AppProvider';
+import AppContext from './context/AppContext';
 
 import { createStyles } from './styles';
 
@@ -17,7 +18,6 @@ import {
   OpenSans_600SemiBold,
   OpenSans_700Bold,
 } from '@expo-google-fonts/open-sans';
-import AppContext from './context/AppContext';
 
 // Screens
 import {
@@ -28,6 +28,7 @@ import {
   Payment,
   Pickup,
   Confirmation,
+  PostCode,
 } from './screens';
 
 //Components
@@ -57,7 +58,7 @@ export default function App() {
     },
   };
 
-  function HomeStack() {
+  function AppScreens() {
     return (
       <Stack.Navigator initialRouteName='home'>
         <Stack.Screen
@@ -83,6 +84,21 @@ export default function App() {
         <Stack.Screen name='payment' component={Payment} />
         <Stack.Screen name='pickup' component={Pickup} />
         <Stack.Screen name='confirmation' component={Confirmation} />
+      </Stack.Navigator>
+    );
+  }
+
+  function HomeStack() {
+    return (
+      <Stack.Navigator
+        initialRouteName='appScreens'
+        mode='modal'
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name='appScreens' component={AppScreens} />
+        <Stack.Screen name='postCodeModal' component={PostCode} />
       </Stack.Navigator>
     );
   }
