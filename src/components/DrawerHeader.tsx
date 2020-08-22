@@ -28,12 +28,12 @@ const DrawerHeader = ({ navigation }) => {
       >
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image
-            source={require('../assets/Menu.png')}
+            source={require('../../assets/Menu.png')}
             style={{ marginLeft: wp('5%'), height: 35 }}
           />
         </TouchableOpacity>
         <Image
-          source={require('../assets/splash.png')}
+          source={require('../../assets/splash.png')}
           style={{ height: 50, width: 50 }}
           resizeMode='contain'
         />

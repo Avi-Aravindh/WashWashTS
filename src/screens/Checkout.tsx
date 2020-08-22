@@ -1,14 +1,12 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
-import { View, Text, Dimensions, Alert } from 'react-native';
+import { View, Text, Dimensions, Alert, TextInput } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { CustomBackButton, Stepper, Button } from '../components';
 import { createStyles } from '../styles';
-import { TextInput } from 'react-native-gesture-handler';
 import { Address } from '../context/AppProvider';
 import AppContext from '../context/AppContext';
-import PostCode from './PostCode';
 
 const styles = createStyles();
 const { width, height } = Dimensions.get('window');

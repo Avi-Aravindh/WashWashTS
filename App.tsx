@@ -6,10 +6,10 @@ import { AppLoading } from 'expo';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import AppProvider from './context/AppProvider';
-import AppContext from './context/AppContext';
+import AppProvider from './src/context/AppProvider';
+import AppContext from './src/context/AppContext';
 
-import { createStyles } from './styles';
+import { createStyles } from './src/styles';
 
 import {
   useFonts,
@@ -29,10 +29,10 @@ import {
   Pickup,
   Confirmation,
   PostCode,
-} from './screens';
+} from './src/screens';
 
 //Components
-import { DrawerContent } from './components';
+import { DrawerContent } from './src/components';
 
 export default function App() {
   const styles = createStyles();

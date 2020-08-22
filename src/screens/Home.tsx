@@ -22,7 +22,7 @@ import Animated, {
 import { PanGestureHandler } from 'react-native-gesture-handler';
 import { diffClamp, interpolateColor } from 'react-native-redash';
 
-import { withDecay } from '../WithDecay';
+import { withDecay } from '../../WithDecay';
 
 import {
   DrawerHeader,

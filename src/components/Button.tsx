@@ -1,6 +1,6 @@
-import React from "react";
-import { View, Text, Button, TouchableOpacity } from "react-native";
-import { createStyles } from "../styles";
+import React from 'react';
+import { View, Text, Button, TouchableOpacity } from 'react-native';
+import { createStyles } from '../styles';
 
 interface ButtonProps {
   text: string;
@@ -18,11 +18,11 @@ const DefaultButton = ({ text, type, disabled, onPress }: ButtonProps) => {
         disabled={disabled ? disabled : false}
         onPress={() => onPress()}
         style={[
-          type == "primary"
+          type == 'primary'
             ? baseStyles.primaryButton
-            : type == "secondary"
+            : type == 'secondary'
             ? baseStyles.secondaryButton
-            : type == "overlay"
+            : type == 'overlay'
             ? baseStyles.overlayButton
             : null,
           disabled ? { opacity: 0.3 } : { opacity: 1 },
@@ -30,11 +30,11 @@ const DefaultButton = ({ text, type, disabled, onPress }: ButtonProps) => {
       >
         <Text
           style={
-            type == "primary"
+            type == 'primary'
               ? baseStyles.primaryButtonText
-              : type == "secondary"
+              : type == 'secondary'
               ? baseStyles.secondaryButtonText
-              : type == "overlay"
+              : type == 'overlay'
               ? baseStyles.overlayButtonText
               : null
           }

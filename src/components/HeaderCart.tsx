@@ -18,7 +18,7 @@ const Cart = () => {
         </View>
       )}
       <Image
-        source={require('../assets/checkout.png')}
+        source={require('../../assets/checkout.png')}
         style={{ marginRight: width * 0.05, height: 35 }}
       />
     </TouchableOpacity>

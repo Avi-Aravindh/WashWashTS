@@ -8,7 +8,7 @@ const CustomBackButton = () => {
     <View style={{ width: 32, height: 32 }}>
       <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image
-          source={require('../assets/arrowLeftBlack.png')}
+          source={require('../../assets/arrowLeftBlack.png')}
           style={{
             marginLeft: 20,
           }}

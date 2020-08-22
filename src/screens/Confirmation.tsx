@@ -36,7 +36,7 @@ const Pickup = () => {
           top: 0,
           left: 0,
         }}
-        source={require('../assets/confirmationBackground.png')}
+        source={require('../../assets/confirmationBackground.png')}
         resizeMode='cover'
       >
         <View

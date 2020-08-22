@@ -33,7 +33,7 @@ const DrawerHeader: FunctionComponent<DrawerHeaderProps> = ({ title }) => {
       >
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
-            source={require('../assets/arrowLeft.png')}
+            source={require('../../assets/arrowLeft.png')}
             style={{ marginLeft: wp('5%'), height: 35 }}
           />
         </TouchableOpacity>
