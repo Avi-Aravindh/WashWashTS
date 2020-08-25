@@ -30,9 +30,9 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
-  const SLIDER_WIDTH = Dimensions.get('window').width;
+  const SLIDER_WIDTH = Dimensions.get('window').width * 0.98;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 1);
-  const ITEM_HEIGHT = hp('50%');
+  const ITEM_HEIGHT = hp('40%');
 
   const _renderImage = ({ item, index }) => {
     return (
@@ -42,12 +42,14 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
           height: ITEM_HEIGHT,
           alignItems: 'center',
           justifyContent: 'center',
+          marginLeft: '1%',
         }}
       >
         <ImageBackground
           style={{
             height: '100%',
             width: '100%',
+            borderRadius: '25%',
             justifyContent: 'flex-end',
           }}
           source={item.image}
@@ -93,13 +95,13 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
   return (
     <Carousel
       layout={'default'}
-      useScrollView={false}
+      useScrollView={true}
       data={data}
       renderItem={_renderImage}
       itemWidth={ITEM_WIDTH}
       sliderWidth={SLIDER_WIDTH}
       autoplay={false}
-      // autoplayInterval={5000}
+      autoplayInterval={5000}
       onSnapToItem={(index) => setActiveImageIndex(index)}
     />
   );

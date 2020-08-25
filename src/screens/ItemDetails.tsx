@@ -65,20 +65,17 @@ const ItemDetails = () => {
       </View>
       <View style={[styles.detailsImageContainer]}>
         <Image
-          source={item.image}
+          source={{ uri: item.itemImage }}
           style={[styles.detailsImage]}
           resizeMode='cover'
         />
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={styles.instructionsHeaderText}>{item.title}</Text>
+        <Text style={styles.instructionsHeaderText}>{item.Name}</Text>
         <Text style={[styles.desriptionText, { marginTop: 10 }]}>
-          {item.price} / kg
+          {item.Price} / {item.UnitDescription}
         </Text>
-        <Text style={[styles.informationText]}>
-          Information text about the product and what to expect from getting
-          this servie.
-        </Text>
+        <Text style={[styles.informationText]}>{item.Description}</Text>
 
         <View style={[styles.separator]} />
         <View style={{ marginTop: 10 }}>

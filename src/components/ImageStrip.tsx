@@ -20,6 +20,7 @@ interface ImageStripProps {
   allItems: Item[];
   selectedCategory: Category;
 }
+
 const { width, height } = Dimensions.get('window');
 const styles = createStyles();
 
@@ -29,9 +30,11 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
   allItems,
   selectedCategory,
 }) => {
-  const [loading, setLoading] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(true);
   const [itemSet1, setItemSet1] = useState<Item[]>([]);
   const [itemSet2, setItemSet2] = useState<Item[]>([]);
+
+  console.log('allitems', allItems);
 
   const navigation = useNavigation();
 
@@ -45,14 +48,13 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
 
     let filteredItems = allItems;
 
-    if (selectedCategory && selectedCategory.categoryId !== '0') {
-      filteredItems = allItems.filter(
-        (item) =>
-          item.category &&
-          selectedCategory &&
-          item.category.categoryId === selectedCategory.categoryId
-      );
-    }
+    // if (selectedCategory && selectedCategory.categoryId !== '0') {
+    //   filteredItems = allItems.filter(
+    //     (item) => item.category && selectedCategory && item.category === '2'
+    //   );
+    // }
+
+    console.log('filtered items', filteredItems);
 
     filteredItems.map((image: Item, index: number) => {
       if (index % 2 === 0) {
@@ -75,7 +77,7 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
         onPress={() => navigation.navigate('itemDetails', { item: image })}
       >
         <ImageBackground
-          source={image.image}
+          source={{ uri: image.itemImage }}
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => {
             setLoading(false);
@@ -92,8 +94,8 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
           {loading && <ActivityIndicator />}
           {!loading && (
             <View>
-              <Text style={styles.welcomeText}>{image.title}</Text>
-              <Text style={styles.dealHeaderText}>{image.price}</Text>
+              <Text style={styles.welcomeText}>{image.Name}</Text>
+              <Text style={styles.dealHeaderText}>{image.Price}</Text>
             </View>
           )}
         </ImageBackground>

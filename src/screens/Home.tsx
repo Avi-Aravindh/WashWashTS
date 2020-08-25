@@ -125,7 +125,8 @@ class Home extends React.Component {
             <Animated.View
               style={[
                 { zIndex: 10000 },
-                { backgroundColor: this.backgroundColor },
+                // { backgroundColor: this.backgroundColor },
+                { backgroundColor: 'white' },
               ]}
             >
               <DrawerHeader navigation={this.props.navigation} />

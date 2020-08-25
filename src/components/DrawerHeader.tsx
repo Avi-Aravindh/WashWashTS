@@ -22,7 +22,7 @@ const DrawerHeader = ({ navigation }) => {
           styles.actionContainer,
           {
             justifyContent: 'space-between',
-            marginTop: hp('7%'),
+            marginTop: hp('5%'),
           },
         ]}
       >
