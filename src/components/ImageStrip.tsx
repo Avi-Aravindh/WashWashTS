@@ -48,11 +48,14 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
 
     let filteredItems = allItems;
 
-    // if (selectedCategory && selectedCategory.categoryId !== '0') {
-    //   filteredItems = allItems.filter(
-    //     (item) => item.category && selectedCategory && item.category === '2'
-    //   );
-    // }
+    if (selectedCategory && selectedCategory.categoryId !== '0') {
+      filteredItems = allItems.filter(
+        (item) =>
+          item.Category &&
+          selectedCategory &&
+          item.Category === selectedCategory.categoryId
+      );
+    }
 
     console.log('filtered items', filteredItems);
 

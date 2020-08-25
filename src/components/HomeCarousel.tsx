@@ -52,7 +52,7 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
             borderRadius: '25%',
             justifyContent: 'flex-end',
           }}
-          source={item.image}
+          source={{ uri: item.itemImage }}
           resizeMode='cover'
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => {
@@ -73,8 +73,8 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
             >
               <View>
                 <Text style={styles.dealHeaderText}>Veckans deal!</Text>
-                <Text style={styles.welcomeText}>{item.title}</Text>
-                <Text style={styles.dealHeaderText}>{item.price}</Text>
+                <Text style={styles.welcomeText}>{item.Name}</Text>
+                <Text style={styles.dealHeaderText}>{item.Price}</Text>
               </View>
               <View>
                 <Button

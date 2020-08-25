@@ -186,6 +186,12 @@ const AppProvider = (props) => {
       setAllItems(tempItems);
     })();
 
+    // load deals from API
+    (async function loadItems() {
+      let tempItems = await fetchAPI(App_Settings.API_GET_DEALS);
+      setOfferItems(tempItems);
+    })();
+
     // load cart from memory
     (async function loadCart() {
       await _getCart();
