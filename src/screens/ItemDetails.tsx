@@ -36,7 +36,7 @@ const ItemDetails = () => {
 
   const route = useRoute();
   const [item, setItem] = useState(route.params.item);
-  const [quantity, setQuantity] = useState(1);
+  const [QuantityInCart, setQuantityInCart] = useState(1);
   const [cartUpdated, setCartUpdated] = useState(0);
   const appContext = useContext(AppContext);
 
@@ -47,13 +47,13 @@ const ItemDetails = () => {
 
   useEffect(() => {
     if (!isItemInCart(appContext.cart, item)) {
-      setQuantity(0);
+      setQuantityInCart(0);
       return;
     } else {
-      setQuantity(
+      setQuantityInCart(
         appContext.cart.cartItems.find(
-          (cartItem: Item) => cartItem.itemId === item.itemId
-        ).quantity
+          (cartItem: Item) => cartItem.Id === item.Id
+        ).QuantityInCart
       );
     }
   }, [appContext.cart, item]);
@@ -85,10 +85,10 @@ const ItemDetails = () => {
           style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center' }}
         >
           <ItemCounter
-            initialCount={quantity}
+            initialCount={QuantityInCart}
             onChange={(newCount) => {
               setCartUpdated(0);
-              setQuantity(newCount);
+              setQuantityInCart(newCount);
             }}
           />
 
@@ -123,22 +123,27 @@ const ItemDetails = () => {
           /> */}
           <Button
             text={
-              quantity < getItemFromCart(appContext.cart, item).quantity
+              QuantityInCart <
+              getItemFromCart(appContext.cart, item).QuantityInCart
                 ? 'Uppdatera'
                 : 'Lägg till'
             }
             type='primary'
             disabled={
-              quantity === getItemFromCart(appContext.cart, item).quantity
+              QuantityInCart ===
+              getItemFromCart(appContext.cart, item).QuantityInCart
                 ? true
                 : getItemFromCart(appContext.cart, item) === false
-                ? quantity === 0
+                ? QuantityInCart === 0
                   ? true
                   : false
                 : false
             }
             onPress={() => {
-              appContext.updateCart({ ...item, quantity: quantity });
+              appContext.updateCart({
+                ...item,
+                QuantityInCart: QuantityInCart,
+              });
               setCartUpdated(1);
             }}
           />

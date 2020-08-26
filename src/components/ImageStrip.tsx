@@ -34,8 +34,6 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
   const [itemSet1, setItemSet1] = useState<Item[]>([]);
   const [itemSet2, setItemSet2] = useState<Item[]>([]);
 
-  console.log('allitems', allItems);
-
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -56,8 +54,6 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
           item.Category === selectedCategory.categoryId
       );
     }
-
-    console.log('filtered items', filteredItems);
 
     filteredItems.map((image: Item, index: number) => {
       if (index % 2 === 0) {

@@ -19,7 +19,10 @@ import Animated, {
   eq,
   neq,
 } from 'react-native-reanimated';
-import { PanGestureHandler } from 'react-native-gesture-handler';
+import {
+  PanGestureHandler,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import { diffClamp, interpolateColor } from 'react-native-redash';
 
 import { withDecay } from '../../WithDecay';
@@ -191,6 +194,9 @@ class Home extends React.Component {
                 </View>
               </Animated.View>
             </PanGestureHandler>
+            <TouchableOpacity onPress={() => this.props.context.emptyCart()}>
+              <Text>Delte</Text>
+            </TouchableOpacity>
           </View>
         )}
       </Fragment>

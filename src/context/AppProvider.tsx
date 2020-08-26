@@ -187,7 +187,7 @@ const AppProvider = (props) => {
     })();
 
     // load deals from API
-    (async function loadItems() {
+    (async function loadDeals() {
       let tempItems = await fetchAPI(App_Settings.API_GET_DEALS);
       setOfferItems(tempItems);
     })();

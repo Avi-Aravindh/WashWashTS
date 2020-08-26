@@ -45,19 +45,19 @@ const Cart = () => {
       >
         <View style={{ width: width * 0.2, height: width * 0.2 }}>
           <Image
-            source={item.image}
+            source={{ uri: item.itemImage }}
             style={[styles.detailsImage, { borderRadius: 10 }]}
           />
         </View>
         <View style={{ width: width * 0.01 }} />
         <View style={{ width: width * 0.65 }}>
-          <Text style={styles.descriptionText}>{item.title} </Text>
-          <Text style={styles.inputLabelText}>{item.price} </Text>
+          <Text style={styles.descriptionText}>{item.Name} </Text>
+          <Text style={styles.inputLabelText}>{item.Price} </Text>
           <View style={{ alignItems: 'flex-end' }}>
             <ItemCounter
-              initialCount={item.quantity}
+              initialCount={item.QuantityInCart}
               onChange={(newCount) => {
-                item.quantity = newCount;
+                item.QuantityInCart = newCount;
                 appContext.updateCart(item);
               }}
             />
@@ -90,7 +90,7 @@ const Cart = () => {
         <View style={{ height: height * 0.45, marginTop: 20 }}>
           <FlatList
             data={appContext.cart.cartItems}
-            keyExtractor={(item) => item.itemId}
+            keyExtractor={(item) => item.Id.toString()}
             renderItem={renderItem}
           />
         </View>
@@ -108,6 +108,11 @@ const Cart = () => {
             text='Checkout'
             type='primary'
             onPress={() => navigation.navigate('checkout')}
+          />
+          <Button
+            text='clear cart'
+            type='primary'
+            onPress={() => appContext.emptyCart()}
           />
         </View>
       </View>
