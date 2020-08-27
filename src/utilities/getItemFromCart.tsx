@@ -1,9 +1,8 @@
-import { Cart, CartItem } from '../context/AppProvider';
+import { Cart, Item } from '../context/AppProvider';
 
-const getItemFromCart = (cart: Cart, item: CartItem): CartItem | boolean => {
-  //   console.log(':Cat', cart, item);
+const getItemFromCart = (cart: Cart, item: Item): Item | boolean => {
   let searchItem = cart.cartItems.find((cartItem) => {
-    return cartItem.itemId === item.itemId;
+    return cartItem.Id === item.Id;
   });
 
   if (searchItem) {
