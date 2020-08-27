@@ -7,6 +7,7 @@ import { App_Settings } from '../constants';
 export interface appChoices {
   postCode: number;
 }
+
 export interface Category {
   categoryId: string;
   categoryTitle: string;
@@ -27,7 +28,6 @@ export interface Item {
   height: number;
   QuantityInCart: number;
 }
-
 export interface Cart {
   cartItems: Item[];
 }
@@ -182,6 +182,7 @@ const AppProvider = (props) => {
 
     // load all items from API
     (async function loadItems() {
+      console.log('getting allitems');
       let tempItems = await fetchAPI(productsAPI);
       setAllItems(tempItems);
     })();
@@ -275,6 +276,7 @@ const AppProvider = (props) => {
     }
   };
 
+  // TODO async storage and API call
   const _updateCart = async (cart) => {
     try {
       let cartJSON = JSON.stringify(cart);
@@ -284,6 +286,7 @@ const AppProvider = (props) => {
     }
   };
 
+  // TODO async storage and API call
   const _getCart = async () => {
     let emptyCart: Cart = { cartItems: [] };
 
@@ -300,11 +303,12 @@ const AppProvider = (props) => {
     }
   };
 
-  // Address Methods
+  // Address Methods TODO convert _updateAddress and remove this function
   const updateAddress = (newAddress: Address) => {
     _updateAddress(newAddress);
   };
 
+  // TODO async storage and API call. Convert to promise
   const _updateAddress = async (newAddress: Address) => {
     try {
       let addressJSON = JSON.stringify(newAddress);
@@ -315,6 +319,7 @@ const AppProvider = (props) => {
     }
   };
 
+  // TODO get addresses from API
   const _getAddress = async () => {
     let emptyAddress: Address = {
       addressLine: '',

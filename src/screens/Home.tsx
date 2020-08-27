@@ -98,8 +98,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     if (!this.props.context.postCode) {
-      console.log('whould navigate');
-      this.props.navigation.navigate('postCodeModal');
+      // this.props.navigation.navigate('postCodeModal');
     }
   }
 

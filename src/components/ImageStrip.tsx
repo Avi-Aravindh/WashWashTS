@@ -31,52 +31,44 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
   selectedCategory,
 }) => {
   const [loading, setLoading] = useState(true);
-  const [itemSet1, setItemSet1] = useState<Item[]>([]);
-  const [itemSet2, setItemSet2] = useState<Item[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
+
+  let CI = 0;
+  let showTemplateOne = true;
 
   const navigation = useNavigation();
 
   useEffect(() => {
     handleCategoryChange();
-  }, [selectedCategory]);
+    buildView();
+  }, [selectedCategory, allItems.length]);
 
   const handleCategoryChange = () => {
-    setItemSet1([]);
-    setItemSet2([]);
-
-    let filteredItems = allItems;
+    let tempFilteredItems = allItems;
 
     if (selectedCategory && selectedCategory.categoryId !== '0') {
-      filteredItems = allItems.filter(
+      tempFilteredItems = allItems.filter(
         (item) =>
           item.Category &&
           selectedCategory &&
           item.Category === selectedCategory.categoryId
       );
     }
-
-    filteredItems.map((image: Item, index: number) => {
-      if (index % 2 === 0) {
-        setItemSet1((prev: Item[]) => [...prev, image]);
-      } else {
-        setItemSet2((prev: Item[]) => [...prev, image]);
-      }
-    });
+    setFilteredItems(tempFilteredItems);
   };
 
-  const renderImage = (image: Item, index: number) => {
+  const renderImage = (image: Item) => {
     return (
       <TouchableOpacity
-        key={index}
+        key={image.Id}
         activeOpacity={0.8}
         style={{
-          height: imageHeights[Math.floor(Math.random() * imageHeights.length)],
-          marginTop: height * 0.01,
+          height: '100%',
         }}
         onPress={() => navigation.navigate('itemDetails', { item: image })}
       >
         <ImageBackground
-          source={{ uri: image.itemImage }}
+          source={{ uri: image.itemImage ? image.itemImage : null }}
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => {
             setLoading(false);
@@ -94,7 +86,7 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
           {!loading && (
             <View>
               <Text style={styles.welcomeText}>{image.Name}</Text>
-              <Text style={styles.dealHeaderText}>{image.Price}</Text>
+              <Text style={styles.dealHeaderText}>{image.Price}:-</Text>
             </View>
           )}
         </ImageBackground>
@@ -102,38 +94,131 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
     );
   };
 
-  return (
-    <View
-      style={{
-        width: width,
-        paddingLeft: width * 0.04,
-        paddingRight: width * 0.04,
-        paddingTop: height * 0.01,
-        flexDirection: 'row',
-        flex: 0,
-      }}
-    >
+  const renderTemplate1 = (images: Item[]) => {
+    return (
       <View
         style={{
-          width: (width - width * 0.1) / 2,
-          marginRight: width * 0.01,
-          flexDirection: 'column',
+          width: width,
+          flexDirection: 'row',
+          flex: 0,
+          justifyContent: 'center',
         }}
       >
-        {itemSet1.map((image, index) => renderImage(image, index))}
+        <View
+          style={{
+            width: width * 0.44,
+            marginRight: width * 0.01,
+          }}
+        >
+          <View
+            style={{
+              height: height * 0.2,
+              marginBottom: height * 0.01,
+              backgroundColor: 'green',
+            }}
+          >
+            {images[0] && renderImage(images[0])}
+          </View>
+          <View
+            style={{
+              height: height * 0.2,
+              marginBottom: height * 0.01,
+              backgroundColor: 'green',
+            }}
+          >
+            {images[1] && renderImage(images[1])}
+          </View>
+        </View>
+        <View
+          style={{
+            width: width * 0.44,
+            marginLeft: width * 0.01,
+          }}
+        >
+          <View
+            style={{
+              height: height * 0.41,
+              marginBottom: height * 0.01,
+              backgroundColor: 'green',
+            }}
+          >
+            {images[2] && renderImage(images[2])}
+          </View>
+        </View>
       </View>
+    );
+  };
 
+  const renderTemplate2 = (images: Item[]) => {
+    return (
       <View
         style={{
-          width: (width - width * 0.1) / 2,
-          marginRight: width * 0.01,
-          flexDirection: 'column',
+          width: width,
+          flexDirection: 'row',
+          flex: 0,
+          justifyContent: 'center',
         }}
       >
-        {itemSet2.map((image, index) => renderImage(image, index))}
+        <View
+          style={{
+            width: width * 0.44,
+            marginRight: width * 0.01,
+          }}
+        >
+          <View
+            style={{
+              height: height * 0.41,
+              marginBottom: height * 0.01,
+              backgroundColor: 'green',
+            }}
+          >
+            {images[0] && renderImage(images[0])}
+          </View>
+        </View>
+        <View
+          style={{
+            width: width * 0.44,
+            marginLeft: width * 0.01,
+          }}
+        >
+          <View
+            style={{
+              height: height * 0.2,
+              marginBottom: height * 0.01,
+              backgroundColor: 'green',
+            }}
+          >
+            {images[1] && renderImage(images[1])}
+          </View>
+          <View
+            style={{
+              height: height * 0.2,
+              marginBottom: height * 0.01,
+              backgroundColor: 'green',
+            }}
+          >
+            {images[2] && renderImage(images[2])}
+          </View>
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
+
+  const buildView = () => {
+    let stripView = [];
+    while (CI < filteredItems.length) {
+      stripView.push(
+        showTemplateOne
+          ? renderTemplate1(filteredItems.slice(CI, CI + 3))
+          : renderTemplate2(filteredItems.slice(CI, CI + 3))
+      );
+      CI += 3;
+      showTemplateOne = !showTemplateOne;
+    }
+    return stripView;
+  };
+
+  return <View>{buildView()}</View>;
 };
 
 export default ImageStrip;

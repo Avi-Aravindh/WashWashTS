@@ -163,7 +163,7 @@ const baseStyles = {
   },
 
   dealHeaderText: {
-    fontFamily: fontFamilies.OpenSansRegular,
+    fontFamily: fontFamilies.OpenSansBold,
     fontSize: fontSizes.lg,
     color: '#fff',
     marginBottom: 10,
@@ -174,7 +174,7 @@ const baseStyles = {
 
   welcomeText: {
     fontFamily: fontFamilies.OpenSansRegular,
-    fontSize: fontSizes.xl,
+    fontSize: fontSizes.lg,
     color: '#fff',
     textShadowColor: '#666',
     textShadowOffset: { width: -1, height: 0 },
@@ -245,11 +245,15 @@ const baseStyles = {
     backgroundColor: colors.PRIMARY,
     marginLeft: 10,
     marginRight: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   counterButtonText: {
     color: '#333',
-    fontSize: fontSizes.vlg,
+    fontSize: fontSizes.md,
+    fontFamily: fontFamilies.OpenSansBold,
     textAlignVertical: 'center',
     textAlign: 'center',
     justifyContent: 'center',

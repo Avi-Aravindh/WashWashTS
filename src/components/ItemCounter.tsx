@@ -29,7 +29,13 @@ const ItemCounter: FunctionComponent<ItemCounterProps> = ({
   };
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.counterButton}
