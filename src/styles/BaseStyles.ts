@@ -120,6 +120,7 @@ const baseStyles = {
     paddingLeft: width * 0.05,
     paddingRight: width * 0.05,
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
   },
 

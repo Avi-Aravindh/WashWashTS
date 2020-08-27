@@ -101,26 +101,17 @@ const ItemDetails = () => {
             <Text style={styles.updateText}>kundvagn uppdaterad</Text>
           </Animated.View>
         </View>
-        <KeyboardAvoidingView
-          behavior={'position'}
-          contentContainerStyle={{
+        <View
+          style={{
+            // position: 'absolute',
+            // bottom: height * -0.2,
+            marginTop: height * 0.1,
+            marginLeft: width * 0.5,
+            marginBottom: height * 0.2,
             flexDirection: 'row',
             width: width * 0.9,
-            justifyContent: 'flex-end',
-          }}
-          style={{
-            position: 'absolute',
-            bottom: height * -0.2,
-            right: 10,
           }}
         >
-          {/* <Button
-            text='Vagn'
-            type='primary'
-            onPress={() => {
-              navigation.navigate('cart');
-            }}
-          /> */}
           <Button
             text={
               QuantityInCart <
@@ -147,7 +138,7 @@ const ItemDetails = () => {
               setCartUpdated(1);
             }}
           />
-        </KeyboardAvoidingView>
+        </View>
       </View>
     </ScrollView>
   );

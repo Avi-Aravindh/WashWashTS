@@ -43,12 +43,15 @@ const Cart = () => {
       <View
         style={[styles.checkoutTextContainer, { height: 100, marginTop: 20 }]}
       >
-        <View style={{ width: width * 0.2, height: width * 0.2 }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('itemDetails', { item: item })}
+          style={{ width: width * 0.2, height: width * 0.2 }}
+        >
           <Image
             source={{ uri: item.itemImage }}
             style={[styles.detailsImage, { borderRadius: 10 }]}
           />
-        </View>
+        </TouchableOpacity>
         <View style={{ width: width * 0.01 }} />
         <View style={{ width: width * 0.65 }}>
           <Text style={styles.descriptionText}>{item.Name} </Text>
