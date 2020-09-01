@@ -1,11 +1,31 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React from 'react';
+import { View, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
+
+const { height, width } = Dimensions.get('window');
 
 const DrawerContent = () => {
+  const navigation = useNavigation();
+
   return (
-    <View>
-      <Text>Drawer Content</Text>
-    </View>
+    <SafeAreaView style={{ alignItems: 'center', flex: 1 }}>
+      <View>
+        <Image
+          source={require('../../assets/splash.png')}
+          style={{ height: 100, width: 100 }}
+          resizeMode='contain'
+        />
+        <View style={{ alignSelf: 'center', marginTop: height * 0.2 }}>
+          <TouchableOpacity onPress={() => navigation.navigate('profile')}>
+            <Text>PROFIL</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ marginTop: 20 }}>
+            <Text>OM OSS</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 

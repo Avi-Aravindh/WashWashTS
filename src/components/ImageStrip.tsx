@@ -31,7 +31,8 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
   selectedCategory,
 }) => {
   const [loading, setLoading] = useState(true);
-  const [filteredItems, setFilteredItems] = useState<Item[]>([]);
+  const [filteredItems, setFilteredItems] = useState<Item[]>(allItems);
+  const [RC, setRC] = useState(0);
 
   let CI = 0;
   let showTemplateOne = true;
@@ -40,8 +41,7 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
 
   useEffect(() => {
     handleCategoryChange();
-    buildView();
-  }, [selectedCategory, allItems.length]);
+  }, [selectedCategory, allItems]);
 
   const handleCategoryChange = () => {
     let tempFilteredItems = allItems;
@@ -68,6 +68,7 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
         onPress={() => navigation.navigate('itemDetails', { item: image })}
       >
         <ImageBackground
+          key={image.Id}
           source={{ uri: image.itemImage ? image.itemImage : null }}
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => {
@@ -114,7 +115,6 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
             style={{
               height: height * 0.2,
               marginBottom: height * 0.01,
-              backgroundColor: 'green',
             }}
           >
             {images[0] && renderImage(images[0])}
@@ -123,7 +123,6 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
             style={{
               height: height * 0.2,
               marginBottom: height * 0.01,
-              backgroundColor: 'green',
             }}
           >
             {images[1] && renderImage(images[1])}
@@ -139,7 +138,6 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
             style={{
               height: height * 0.41,
               marginBottom: height * 0.01,
-              backgroundColor: 'green',
             }}
           >
             {images[2] && renderImage(images[2])}
@@ -169,7 +167,6 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
             style={{
               height: height * 0.41,
               marginBottom: height * 0.01,
-              backgroundColor: 'green',
             }}
           >
             {images[0] && renderImage(images[0])}
@@ -185,7 +182,6 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
             style={{
               height: height * 0.2,
               marginBottom: height * 0.01,
-              backgroundColor: 'green',
             }}
           >
             {images[1] && renderImage(images[1])}
@@ -194,7 +190,6 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
             style={{
               height: height * 0.2,
               marginBottom: height * 0.01,
-              backgroundColor: 'green',
             }}
           >
             {images[2] && renderImage(images[2])}

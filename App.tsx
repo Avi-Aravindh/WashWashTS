@@ -5,7 +5,10 @@ import { StyleSheet, Text, View } from 'react-native';
 import { AppLoading } from 'expo';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack';
 import AppProvider from './src/context/AppProvider';
 import AppContext from './src/context/AppContext';
 
@@ -29,6 +32,7 @@ import {
   Pickup,
   Confirmation,
   PostCode,
+  Profile,
 } from './src/screens';
 
 //Components
@@ -84,6 +88,7 @@ export default function App() {
         <Stack.Screen name='payment' component={Payment} />
         <Stack.Screen name='pickup' component={Pickup} />
         <Stack.Screen name='confirmation' component={Confirmation} />
+        <Stack.Screen name='profile' component={Profile} />
       </Stack.Navigator>
     );
   }
@@ -95,6 +100,9 @@ export default function App() {
         mode='modal'
         screenOptions={{
           headerShown: false,
+          gestureEnabled: true,
+          ...TransitionPresets.ModalPresentationIOS,
+          cardStyle: { backgroundColor: 'red', height: 50 },
         }}
       >
         <Stack.Screen name='appScreens' component={AppScreens} />
@@ -122,8 +130,5 @@ export default function App() {
         )}
       </AppContext.Consumer>
     </AppProvider>
-    // <View style={styles.pageContainer}>
-
-    // </View>
   );
 }

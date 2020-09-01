@@ -29,7 +29,8 @@ const ListHeader = () => {
           alignItems: 'center',
           paddingLeft: 10,
           backgroundColor: '#fff',
-          marginTop: 20,
+          marginTop: 10,
+          marginBottom: 10,
         }}
         horizontal={true}
         indicatorStyle={'white'}

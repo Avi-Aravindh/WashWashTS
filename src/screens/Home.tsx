@@ -193,9 +193,6 @@ class Home extends React.Component {
                 </View>
               </Animated.View>
             </PanGestureHandler>
-            <TouchableOpacity onPress={() => this.props.context.emptyCart()}>
-              <Text>Delte</Text>
-            </TouchableOpacity>
           </View>
         )}
       </Fragment>
