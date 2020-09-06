@@ -120,7 +120,7 @@ export default function App() {
 
             {fontsLoaded && (
               <Drawer.Navigator
-                drawerContent={() => <DrawerContent />}
+                drawerContent={(props) => <DrawerContent {...props} />}
                 initialRouteName='homeStack'
               >
                 <Drawer.Screen name='homeStack' component={HomeStack} />

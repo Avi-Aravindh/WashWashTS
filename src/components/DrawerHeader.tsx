@@ -15,7 +15,7 @@ import AppContext from '../context/AppContext';
 import HeaderCart from './HeaderCart';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const { height, width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const DrawerHeader = ({ navigation }) => {
   const styles = createStyles();

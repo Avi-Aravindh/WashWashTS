@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
-const { height, width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export const colors = {
   PRIMARY: '#45DDE6',
@@ -8,6 +8,7 @@ export const colors = {
   INSTRUCTIONS_TEXT: '#4A4A4A',
   INFORMATION_TEXT: '#7F7F7F',
   CART_UPDATED_TEXT: '#06EFA9',
+  USERINFO_SUBTEXT: '#007587',
   INPUT_TEXT: '#888888',
   INPUT_BORDER: '#DBDBDB',
   SEPARATOR_BORDER: '#F2F2F2',
@@ -106,6 +107,7 @@ const baseStyles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   stepperContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -264,6 +266,51 @@ const baseStyles = {
   cartCostHeaderText: {
     fontSize: fontSizes.xl,
     fontFamily: fontFamilies.OpenSansRegular,
+    color: colors.PRIMARY,
+  },
+
+  userNameHeader: {
+    fontSize: fontSizes.xl,
+    fontFamily: fontFamilies.OpenSansLight,
+    color: colors.PRIMARY,
+  },
+
+  userInfoSubText: {
+    fontSize: fontSizes.md,
+    fontFamily: fontFamilies.OpenSansRegular,
+    color: colors.USERINFO_SUBTEXT,
+    marginTop: 10,
+  },
+
+  addressNameHeader: {
+    fontSize: fontSizes.lg,
+    fontFamily: fontFamilies.OpenSansBold,
+    color: colors.PRIMARY,
+    marginTop: 20,
+  },
+
+  addressDetails: {
+    fontSize: fontSizes.md,
+    fontFamily: fontFamilies.OpenSansRegular,
+    color: colors.SECONDARY_TEXT,
+    marginTop: 10,
+  },
+
+  cardNumbers: {
+    fontSize: fontSizes.lg,
+    fontFamily: fontFamilies.OpenSansRegular,
+    color: colors.SECONDARY_TEXT,
+    // marginTop: 10,
+  },
+
+  cardHeader: {
+    fontSize: fontSizes.sm,
+    fontFamily: fontFamilies.OpenSansRegular,
+  },
+
+  cardDetails: {
+    fontSize: fontSizes.lg,
+    fontFamily: fontFamilies.OpenSansBold,
     color: colors.PRIMARY,
   },
 
