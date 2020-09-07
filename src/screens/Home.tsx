@@ -34,6 +34,8 @@ import {
   ImageStrip,
 } from '../components';
 
+import { PostCode } from '../screens';
+
 import withAppContext from '../context/withAppContext';
 import { createStyles } from '../styles';
 
@@ -42,9 +44,9 @@ const { width, height } = Dimensions.get('window');
 class Home extends React.Component {
   constructor(props: any) {
     super(props);
-
     this.state = {
       loading: false,
+      showModal: false,
       context: props.context,
     };
   }
@@ -97,14 +99,20 @@ class Home extends React.Component {
   });
 
   componentDidMount() {
+    console.log('postcode', this.props.context.postCode);
     if (!this.props.context.postCode) {
-      // this.props.navigation.navigate('postCodeModal');
+      this.setState({ showModal: true });
     }
   }
 
   componentDidUpdate() {
     // this.props.navigation.navigate('cart');
   }
+
+  handlePostCodeChange = () => {
+    this.setState({ showModal: false });
+    console.log('handlepost code change');
+  };
 
   render() {
     return (
@@ -125,11 +133,7 @@ class Home extends React.Component {
           <View style={[this.styles.pageContainer]}>
             {/* Page Header Area */}
             <Animated.View
-              style={[
-                { zIndex: 10000 },
-                // { backgroundColor: this.backgroundColor },
-                { backgroundColor: 'white' },
-              ]}
+              style={[{ zIndex: 10000 }, { backgroundColor: 'white' }]}
             >
               <DrawerHeader navigation={this.props.navigation} />
             </Animated.View>
@@ -186,13 +190,17 @@ class Home extends React.Component {
                     )
                   }
                 >
-                  <ImageStrip
+                  {/* <ImageStrip
                     selectedCategory={this.props.context.selectedCategory}
                     allItems={this.props.context.allItems}
-                  />
+                  /> */}
                 </View>
               </Animated.View>
             </PanGestureHandler>
+            <PostCode
+              isVisible={this.state.showModal}
+              handleClose={this.handlePostCodeChange}
+            />
           </View>
         )}
       </Fragment>

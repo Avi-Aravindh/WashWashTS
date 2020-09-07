@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, Image, Alert, Dimensions, Button } from 'react-native';
-import Modal from 'react-native-modal';
+import { View, Image, Alert, Dimensions } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -13,7 +12,7 @@ import { createStyles } from '../styles';
 import { colors } from '../styles/BaseStyles';
 import AppContext from '../context/AppContext';
 import HeaderCart from './HeaderCart';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { PostCode } from '../screens';
 
 const { width, height } = Dimensions.get('window');
 
@@ -21,6 +20,12 @@ const DrawerHeader = ({ navigation }) => {
   const styles = createStyles();
   const appContext = useContext(AppContext);
   const [showModal, setShowModal] = useState(false);
+
+  const handlePostCodeChange = () => {
+    setShowModal(false);
+    console.log('handle post code change');
+  };
+
   return (
     <View>
       <View>
@@ -68,84 +73,7 @@ const DrawerHeader = ({ navigation }) => {
         </View>
       </View>
 
-      <Modal
-        isVisible={showModal}
-        backdropOpacity={0.7}
-        useNativeDriver={true}
-        style={{ alignSelf: 'center' }}
-      >
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            height: height * 0.4,
-            width: width * 0.8,
-          }}
-        >
-          <View
-            style={{
-              height: height * 0.3,
-              width: width * 0.6,
-            }}
-          >
-            <Text>Hej!</Text>
-            <Text style={{ marginTop: height * 0.03 }}>
-              För att kunna avgöra om vi hjälpa dig behöver vi veta var i
-              Sverige du bor.
-            </Text>
-            <View>
-              <Text
-                style={{
-                  marginTop: 20,
-                  // opacity: postCode.length > 0 ? 1 : 0,
-                }}
-              >
-                Postnummer
-              </Text>
-              <TextInput
-                // ref={postCodeRef}
-                keyboardType={'numeric'}
-                // onSubmitEditing={() => floorRef.current.focus()}
-                // value={postCode}
-                // onChangeText={(value) => setPostCode(value)}
-                placeholder='Postnummer'
-                style={[
-                  styles.inputText,
-                  {
-                    width: width * 0.35,
-                    marginTop: 10,
-                    textAlign: 'left',
-                  },
-                ]}
-              />
-            </View>
-            <View
-              style={{
-                marginTop: height * 0.05,
-                marginLeft: width * 0.3,
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  width: width * 0.3,
-                  height: 35,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: colors.PRIMARY,
-                  borderRadius: 20,
-                  color: 'white',
-                  borderColor: '#707070',
-                }}
-                type='primary'
-                onPress={() => setShowModal(false)}
-              >
-                <Text style={{ color: 'white' }}>Fortsatt</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <PostCode isVisible={showModal} handleClose={handlePostCodeChange} />
     </View>
   );
 };

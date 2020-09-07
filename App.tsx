@@ -110,7 +110,7 @@ export default function App() {
         }}
       >
         <Stack.Screen name='appScreens' component={AppScreens} />
-        <Stack.Screen name='postCodeModal' component={PostCode} />
+        {/* <Stack.Screen name='postCodeModal' component={PostCode} /> */}
       </Stack.Navigator>
     );
   }

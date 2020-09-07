@@ -178,18 +178,20 @@ const AppProvider = (props) => {
     setCategories(tempAppCategories);
     setSelectedCategory(tempAppCategories[0]);
 
-    let productsAPI = App_Settings.API_GET_PRODUCTS + 'zip_code=72212';
+    let productsAPI = App_Settings.API_GET_PRODUCTS + '?zip_code=72212';
 
     // load all items from API
     (async function loadItems() {
       console.log('getting allitems');
-      let tempItems = await fetchAPI(productsAPI);
+      // let tempItems = await fetchAPI(productsAPI).results;
+      let tempItems = [];
       setAllItems(tempItems);
     })();
 
     // load deals from API
     (async function loadDeals() {
-      let tempItems = await fetchAPI(App_Settings.API_GET_DEALS);
+      // let tempItems = await fetchAPI(App_Settings.API_GET_DEALS).results;
+      let tempItems = [];
       setOfferItems(tempItems);
     })();
 
@@ -218,6 +220,34 @@ const AppProvider = (props) => {
     setTotalCartCount(totalCount);
     setTotalCartCost(totalCost);
   }, [cart]);
+
+  // DEVICE POST CODE FUNCTIONS
+  const _getDevicePostCode = async () => {
+    try {
+      let postCodeJSON = await AsyncStorage.getItem('@devicePostCode');
+
+      if (postCodeJSON) {
+        console.log('got postcode', postCodeJSON);
+
+        setPostCode(JSON.parse(postCodeJSON));
+      } else {
+        setPostCode(null);
+      }
+    } catch (e) {
+      console.log('Error reading postcode from device', e);
+    }
+  };
+
+  const _updatePostCode = async (newPostCode) => {
+    console.log('updating postcode', newPostCode);
+    try {
+      let postCodeJSON = JSON.stringify(newPostCode);
+      await AsyncStorage.setItem('@devicePostCode', postCodeJSON);
+      _getDevicePostCode();
+    } catch (e) {
+      console.log('Error writing postcode', e);
+    }
+  };
 
   // Cart Items
 
@@ -350,6 +380,7 @@ const AppProvider = (props) => {
     <AppContext.Provider
       value={{
         postCode: postCode,
+        _updatePostCode: _updatePostCode,
         isUserLoggedIn: isUserLoggedIn,
         allItems: allItems,
         offerItems: offerItems,
