@@ -24,7 +24,7 @@ const DrawerContent = ({ navigation }) => {
           <TouchableOpacity
             style={{ marginTop: 20 }}
             onPress={() => {
-              navigation.navigate('profile');
+              navigation.navigate('existingOrders');
             }}
           >
             <Text>BEFINTLIGA BESTÄLLNINGAR</Text>

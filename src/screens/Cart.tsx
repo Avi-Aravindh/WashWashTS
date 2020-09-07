@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext, useEffect, FunctionComponent } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   View,
   SafeAreaView,
@@ -9,7 +9,7 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { createStyles } from '../styles';
 import AppContext from '../context/AppContext';
@@ -39,7 +39,6 @@ const Cart = () => {
 
   const renderItem = ({ item }: Item) => {
     return (
-      // <View style={[styles.checkoutTextContainer, { marginTop: 20 }]}>
       <View
         style={[styles.checkoutTextContainer, { height: 100, marginTop: 20 }]}
       >

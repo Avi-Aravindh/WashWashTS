@@ -33,6 +33,8 @@ import {
   Confirmation,
   PostCode,
   Profile,
+  ExistingOrders,
+  OrderDetails,
 } from './src/screens';
 
 //Components
@@ -89,6 +91,8 @@ export default function App() {
         <Stack.Screen name='pickup' component={Pickup} />
         <Stack.Screen name='confirmation' component={Confirmation} />
         <Stack.Screen name='profile' component={Profile} />
+        <Stack.Screen name='existingOrders' component={ExistingOrders} />
+        <Stack.Screen name='orderDetails' component={OrderDetails} />
       </Stack.Navigator>
     );
   }

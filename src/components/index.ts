@@ -9,3 +9,4 @@ export { default as ItemCounter } from './ItemCounter';
 export { default as HeaderCart } from './HeaderCart';
 export { default as Stepper } from './Stepper';
 export { default as CustomBackButton } from './CustomBackButton';
+export { default as CircularProgress } from './CircularProgress';
