@@ -49,7 +49,7 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
           style={{
             height: '100%',
             width: '100%',
-            borderRadius: '25%',
+            borderRadius: 25,
             justifyContent: 'flex-end',
           }}
           source={{ uri: item.itemImage }}

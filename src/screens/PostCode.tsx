@@ -114,7 +114,6 @@ const PostCode = (props) => {
       >
         <View
           style={{
-            height: height * 0.3,
             width: width * 0.6,
           }}
         >
