@@ -161,8 +161,8 @@ const tempAppCategories: Category[] = [
 // ];
 
 const AppProvider = (props) => {
-  const [postCode, setPostCode] = useState();
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
+  const [postCode, setPostCode] = useState();
   const [allItems, setAllItems] = useState<Item[]>([]);
   const [offerItems, setOfferItems] = useState<Item[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -178,22 +178,9 @@ const AppProvider = (props) => {
     setCategories(tempAppCategories);
     setSelectedCategory(tempAppCategories[0]);
 
-    let productsAPI = App_Settings.API_GET_PRODUCTS + '?zip_code=72212';
-
-    // load all items from API
-    (async function loadItems() {
-      console.log('getting allitems');
-      // let tempItems = await fetchAPI(productsAPI).results;
-      let tempItems = [];
-      setAllItems(tempItems);
-    })();
-
-    // load deals from API
-    (async function loadDeals() {
-      // let tempItems = await fetchAPI(App_Settings.API_GET_DEALS).results;
-      let tempItems = [];
-      setOfferItems(tempItems);
-    })();
+    _getDevicePostCode();
+    _getAllItems();
+    _getOfferItems();
 
     // load cart from memory
     (async function loadCart() {
@@ -249,8 +236,57 @@ const AppProvider = (props) => {
     }
   };
 
-  // Cart Items
+  // All Items Functions
+  const _getAllItems = async () => {
+    try {
+      let allItemsJSON = await AsyncStorage.getItem('@allItems');
 
+      if (allItemsJSON) {
+        setAllItems(JSON.parse(allItemsJSON));
+      } else {
+        setAllItems([]);
+      }
+    } catch (e) {
+      console.log('Error reading all items from device', e);
+    }
+  };
+
+  const _updateAllItems = async (newAllItems: Item[]) => {
+    try {
+      let newAllItemsJSON = JSON.stringify(newAllItems);
+      await AsyncStorage.setItem('@allItems', newAllItemsJSON);
+      _getAllItems();
+    } catch (e) {
+      console.log('Error writing all items', e);
+    }
+  };
+
+  // Offer Items Functions
+  const _getOfferItems = async () => {
+    try {
+      let offerItemsJSON = await AsyncStorage.getItem('@offerItems');
+
+      if (offerItemsJSON) {
+        setOfferItems(JSON.parse(offerItemsJSON));
+      } else {
+        setOfferItems([]);
+      }
+    } catch (e) {
+      console.log('Error reading offer items from device', e);
+    }
+  };
+
+  const _updateOfferItems = async (newOfferItems: Item[]) => {
+    try {
+      let offerItemsJSON = JSON.stringify(newOfferItems);
+      await AsyncStorage.setItem('@offerItems', offerItemsJSON);
+      _getOfferItems();
+    } catch (e) {
+      console.log('Error writing offer items', e);
+    }
+  };
+
+  // Cart Items Functions
   const updateCart = (item: Item) => {
     let tempCart = { ...cart };
     let existingItem = tempCart.cartItems.find(
@@ -379,12 +415,19 @@ const AppProvider = (props) => {
   return (
     <AppContext.Provider
       value={{
+        isUserLoggedIn: isUserLoggedIn,
+
         postCode: postCode,
         _updatePostCode: _updatePostCode,
-        isUserLoggedIn: isUserLoggedIn,
+
         allItems: allItems,
+        _updateAllItems: _updateAllItems,
+
         offerItems: offerItems,
+        _updateOfferItems: _updateOfferItems,
+
         categories: categories,
+
         cart: cart,
         totalCartCount: totalCartCount,
         totalCartCost: totalCartCost,

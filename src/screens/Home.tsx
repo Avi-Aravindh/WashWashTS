@@ -34,7 +34,7 @@ import {
   ImageStrip,
 } from '../components';
 
-import { PostCode } from '../screens';
+import PostCode from './PostCode';
 
 import withAppContext from '../context/withAppContext';
 import { createStyles } from '../styles';
@@ -99,19 +99,13 @@ class Home extends React.Component {
   });
 
   componentDidMount() {
-    console.log('postcode', this.props.context.postCode);
     if (!this.props.context.postCode) {
       this.setState({ showModal: true });
     }
   }
 
-  componentDidUpdate() {
-    // this.props.navigation.navigate('cart');
-  }
-
   handlePostCodeChange = () => {
     this.setState({ showModal: false });
-    console.log('handlepost code change');
   };
 
   render() {
@@ -166,35 +160,38 @@ class Home extends React.Component {
                 ]}
               >
                 {/* Carousel Area */}
-
-                <Animated.View
-                  pointerEvents='auto'
-                  style={[{ opacity: this.opacity }]}
-                >
-                  {this.props.context &&
-                    this.props.context.offerItems.length > 0 && (
-                      <HomeCarousel data={this.props.context.offerItems} />
-                    )}
-                </Animated.View>
-
+                {this.props.context.offerItems.length > 0 && (
+                  <Animated.View
+                    pointerEvents='auto'
+                    style={[{ opacity: this.opacity }]}
+                  >
+                    {this.props.context &&
+                      this.props.context.offerItems.length > 0 && (
+                        <HomeCarousel data={this.props.context.offerItems} />
+                      )}
+                  </Animated.View>
+                )}
                 {/* ImageStrip Area */}
-
-                <View style={[{}]}>
-                  <ListHeader />
-                </View>
-                <View
-                  style={{ flex: 0 }}
-                  onLayout={(e) =>
-                    this.contentHeight.setValue(
-                      Math.max(e.nativeEvent.layout.height, height * 0.5)
-                    )
-                  }
-                >
-                  {/* <ImageStrip
-                    selectedCategory={this.props.context.selectedCategory}
-                    allItems={this.props.context.allItems}
-                  /> */}
-                </View>
+                {this.props.context.allItems.length > 0 && (
+                  <View>
+                    <View style={[{}]}>
+                      <ListHeader />
+                    </View>
+                    <View
+                      style={{ flex: 0 }}
+                      onLayout={(e) =>
+                        this.contentHeight.setValue(
+                          Math.max(e.nativeEvent.layout.height, height * 0.5)
+                        )
+                      }
+                    >
+                      <ImageStrip
+                        selectedCategory={this.props.context.selectedCategory}
+                        allItems={this.props.context.allItems}
+                      />
+                    </View>
+                  </View>
+                )}
               </Animated.View>
             </PanGestureHandler>
             <PostCode

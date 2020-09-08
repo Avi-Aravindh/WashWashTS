@@ -111,11 +111,6 @@ const Cart = () => {
             type='primary'
             onPress={() => navigation.navigate('checkout')}
           />
-          <Button
-            text='clear cart'
-            type='primary'
-            onPress={() => appContext.emptyCart()}
-          />
         </View>
       </View>
     </SafeAreaView>

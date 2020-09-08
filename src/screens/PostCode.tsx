@@ -31,19 +31,60 @@ const PostCode = (props) => {
 
   useEffect(() => {
     setPostCode(appContext.postCode ? appContext.postCode : '');
+    if (postCode) {
+      let postCodeArray = postCode.split('');
+      if (postCodeArray[2] !== ' ') {
+        postCodeArray.splice(2, 0, ' ');
+      }
+      setPostCode(postCodeArray.join(''));
+    }
+    formatPostCode();
   }, [props]);
 
   useEffect(() => {
-    console.log('screen loads');
     if (postCode) {
-      console.log('gotpostcode');
       let postCodeArray = postCode.split('');
-      postCodeArray.splice(2, 0, ' ');
+      if (postCodeArray[2] !== ' ') {
+        postCodeArray.splice(2, 0, ' ');
+      }
+
       setPostCode(postCodeArray.join(''));
     }
   }, []);
 
   useEffect(() => {
+    formatPostCode();
+    if (postCode.length === 6) {
+      let postCodeForAPI = postCode.split(' ').join('');
+      let url = `${App_Settings.API_GET_PRODUCTS}?zip_code=${postCodeForAPI}`;
+
+      setLoading(true);
+
+      fetchAPI(url).then((response) => {
+        setLoading(false);
+        if (response.results && response.results.length > 0) {
+          setIsServiceAvailable(true);
+          appContext._updatePostCode(postCodeForAPI);
+          appContext._updateAllItems(response.results);
+
+          // getting deals
+          let url = `${App_Settings.API_GET_DEALS}`;
+          fetchAPI(url).then((res) => {
+            appContext._updateOfferItems(res.results);
+          });
+
+          Keyboard.dismiss();
+        } else {
+          setIsServiceAvailable(false);
+          appContext._updatePostCode(postCodeForAPI);
+          appContext._updateAllItems([]);
+          appContext._updateOfferItems([]);
+        }
+      });
+    }
+  }, [postCode]);
+
+  const formatPostCode = () => {
     if (postCode.length === 2) {
       if (addition) {
         setPostCode((prev) => prev + ' ');
@@ -52,31 +93,12 @@ const PostCode = (props) => {
       }
       setAddition((prev) => !prev);
     }
-
-    if (postCode.length === 6) {
-      Keyboard.dismiss();
-      let postCodeForAPI = postCode.split(' ').join('');
-      let url = `${App_Settings.API_GET_PRODUCTS}?zip_code=${postCodeForAPI}`;
-
-      console.log('Postcode to Api API_GET_PRODUCTS', url);
-      setLoading(true);
-      fetchAPI(url).then((response) => {
-        setLoading(false);
-        if (response.results && response.results.length > 0) {
-          setIsServiceAvailable(true);
-          appContext._updatePostCode(postCodeForAPI);
-          console.log('found data');
-        } else {
-          setIsServiceAvailable(false);
-          console.log('no service');
-        }
-      });
-    }
-  }, [postCode]);
+  };
 
   return (
     <Modal
       isVisible={props.isVisible}
+      animationType='fade'
       backdropOpacity={0.7}
       useNativeDriver={true}
       style={{ alignSelf: 'center' }}
@@ -118,9 +140,8 @@ const PostCode = (props) => {
             >
               <TextInput
                 keyboardType={'numeric'}
-                autoFocus={true}
+                autoFocus={postCode.length < 5}
                 maxLength={6}
-                // onSubmitEditing={() => floorRef.current.focus()}
                 value={postCode}
                 onChangeText={(value) => setPostCode(value)}
                 placeholder='Postnummer'
@@ -141,14 +162,21 @@ const PostCode = (props) => {
                 />
               )}
             </View>
-            <View style={{ height: 25, marginTop: 5 }}>
+            <View style={{ height: 70, marginTop: 5 }}>
               {!loading && postCode.length === 6 && isServiceAvailable && (
                 <Text style={styles.inputLabelText}>
                   Toppen! Vi kan leverera till dig 👍.
                 </Text>
               )}
+              {!loading && postCode.length === 6 && !isServiceAvailable && (
+                <Text style={styles.inputLabelText}>
+                  Tyvärr kan vi inte leverera till detta område just nu😔.
+                  Försök med 72212 istället
+                </Text>
+              )}
             </View>
           </View>
+
           <View
             style={{
               marginTop: height * 0.05,
@@ -169,7 +197,9 @@ const PostCode = (props) => {
               type='primary'
               onPress={() => props.handleClose()}
             >
-              <Text style={{ color: 'white' }}>Fortsatt</Text>
+              <Text style={{ color: 'white' }}>
+                {isServiceAvailable ? 'Fortsätta' : 'Close'}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

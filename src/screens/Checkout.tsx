@@ -51,6 +51,8 @@ const Pickup = () => {
     if (appContext.address.addressLine === '') {
       addressRef.current.focus();
     }
+
+    setPostCode(appContext.postCode);
   }, [navigation]);
 
   return (
@@ -113,7 +115,7 @@ const Pickup = () => {
               </Text>
               <TextInput
                 ref={cityRef}
-                onSubmitEditing={() => postCodeRef.current.focus()}
+                onSubmitEditing={() => floorRef.current.focus()}
                 placeholder='Stad'
                 value={city}
                 onChangeText={(value) => setCity(value)}
@@ -132,7 +134,7 @@ const Pickup = () => {
               <Text
                 style={{
                   marginTop: 20,
-                  opacity: postCode.length > 0 ? 1 : 0,
+                  opacity: postCode.length > 0 ? 0.5 : 0,
                 }}
               >
                 Postnummer
@@ -140,16 +142,18 @@ const Pickup = () => {
               <TextInput
                 ref={postCodeRef}
                 keyboardType={'numeric'}
+                editable={false}
                 onSubmitEditing={() => floorRef.current.focus()}
                 value={postCode}
                 onChangeText={(value) => setPostCode(value)}
-                placeholder='Postnummer'
+                placeholder='postnummer'
                 style={[
                   styles.inputText,
                   {
                     width: width * 0.35,
                     marginTop: 10,
                     textAlign: 'left',
+                    opacity: 0.5,
                   },
                 ]}
               />
@@ -159,7 +163,6 @@ const Pickup = () => {
             style={{
               flexDirection: 'row',
               width: width * 0.8,
-
               justifyContent: 'space-between',
             }}
           >

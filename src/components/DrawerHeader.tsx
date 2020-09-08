@@ -4,26 +4,22 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { TouchableOpacity, TextInput } from 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { createStyles } from '../styles';
 // import { Button } from '../components';
 
-import { colors } from '../styles/BaseStyles';
-import AppContext from '../context/AppContext';
 import HeaderCart from './HeaderCart';
-import { PostCode } from '../screens';
+import PostCode from '../screens/PostCode';
 
 const { width, height } = Dimensions.get('window');
 
 const DrawerHeader = ({ navigation }) => {
   const styles = createStyles();
-  const appContext = useContext(AppContext);
   const [showModal, setShowModal] = useState(false);
 
   const handlePostCodeChange = () => {
     setShowModal(false);
-    console.log('handle post code change');
   };
 
   return (
