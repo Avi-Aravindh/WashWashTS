@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -108,7 +108,7 @@ const PostCode = (props) => {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: 'white',
-          height: height * 0.4,
+          height: height * 0.5,
           width: width * 0.8,
         }}
       >
@@ -179,7 +179,7 @@ const PostCode = (props) => {
 
           <View
             style={{
-              marginTop: height * 0.05,
+              marginTop: 10,
               marginLeft: width * 0.3,
             }}
           >
