@@ -24,8 +24,6 @@ interface ImageStripProps {
 const { width, height } = Dimensions.get('window');
 const styles = createStyles();
 
-const imageHeights = [200, 225, 250, 275, 300, 325, 350, 375];
-
 const ImageStrip: FunctionComponent<ImageStripProps> = ({
   allItems,
   selectedCategory,
@@ -40,13 +38,10 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
 
   useEffect(() => {
     handleCategoryChange();
-  }, [selectedCategory, allItems]);
+  }, [selectedCategory]);
 
   const handleCategoryChange = () => {
     let tempFilteredItems = allItems;
-    if (!selectedCategory || selectedCategory.Id === 0) {
-      setFilteredItems(allItems);
-    }
 
     if (selectedCategory && selectedCategory.Id !== 0) {
       tempFilteredItems = allItems.filter(

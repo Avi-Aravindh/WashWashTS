@@ -171,9 +171,6 @@ const AppProvider = (props) => {
 
       if (categoriesJSON) {
         setCategories(JSON.parse(categoriesJSON));
-        setSelectedCategory(
-          JSON.parse(categoriesJSON).filter((c: Category) => c.Id === 0)
-        );
       } else {
         setCategories([]);
       }
@@ -186,6 +183,7 @@ const AppProvider = (props) => {
     try {
       newCategories.sort((a, b) => a > b);
       newCategories.unshift({ Id: 0, Name: 'All', itemImage: '' });
+      updateSelectedCategory({ Id: 0, Name: 'All', itemImage: '' });
       let newCategoriesJSON = JSON.stringify(newCategories);
       await AsyncStorage.setItem('@categories', newCategoriesJSON);
       _getCategories();
