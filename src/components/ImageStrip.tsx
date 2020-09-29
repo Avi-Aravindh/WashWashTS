@@ -32,7 +32,6 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const [filteredItems, setFilteredItems] = useState<Item[]>(allItems);
-  const [RC, setRC] = useState(0);
 
   let CI = 0;
   let showTemplateOne = true;
@@ -45,13 +44,16 @@ const ImageStrip: FunctionComponent<ImageStripProps> = ({
 
   const handleCategoryChange = () => {
     let tempFilteredItems = allItems;
+    if (!selectedCategory || selectedCategory.Id === 0) {
+      setFilteredItems(allItems);
+    }
 
-    if (selectedCategory && selectedCategory.categoryId !== '0') {
+    if (selectedCategory && selectedCategory.Id !== 0) {
       tempFilteredItems = allItems.filter(
         (item) =>
           item.Category &&
           selectedCategory &&
-          item.Category === selectedCategory.categoryId
+          item.Category === selectedCategory.Name
       );
     }
     setFilteredItems(tempFilteredItems);

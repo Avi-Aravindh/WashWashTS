@@ -67,9 +67,15 @@ const PostCode = (props) => {
           appContext._updatePostCode(postCodeForAPI);
           appContext._updateAllItems(response.results);
 
+          // getting categories
+          let categoriesURL = `${App_Settings.API_GET_CATEGORIES}`;
+          fetchAPI(categoriesURL).then((res) => {
+            appContext._updateCategories(res.results);
+          });
+
           // getting deals
-          let url = `${App_Settings.API_GET_DEALS}`;
-          fetchAPI(url).then((res) => {
+          let dealsURL = `${App_Settings.API_GET_DEALS}`;
+          fetchAPI(dealsURL).then((res) => {
             appContext._updateOfferItems(res.results);
           });
 

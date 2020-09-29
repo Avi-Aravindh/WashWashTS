@@ -58,13 +58,12 @@ const ListHeader = () => {
                 <Text
                   style={[
                     styles.overlayButtonText,
-                    selectedCategory &&
-                    category.categoryId === selectedCategory.categoryId
+                    selectedCategory && category.Id === selectedCategory.Id
                       ? { color: 'red' }
                       : '',
                   ]}
                 >
-                  {category.categoryTitle}
+                  {category.Name}
                 </Text>
               </View>
             </TouchableOpacity>

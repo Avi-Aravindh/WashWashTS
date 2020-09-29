@@ -9,8 +9,9 @@ export interface appChoices {
 }
 
 export interface Category {
-  categoryId: string;
-  categoryTitle: string;
+  Id: number;
+  Name: string;
+  itemImage: string;
 }
 
 export interface Item {
@@ -68,98 +69,6 @@ export interface Pickup {
   time: string;
 }
 
-const tempAppCategories: Category[] = [
-  { categoryId: '0', categoryTitle: 'Alla' },
-  { categoryId: '1', categoryTitle: 'Överdel' },
-  { categoryId: '2', categoryTitle: 'Underdel' },
-  { categoryId: '3', categoryTitle: 'Acessoarer' },
-  { categoryId: '4', categoryTitle: 'Högtid' },
-];
-
-// const tempOfferItems = [
-//   {
-//     itemId: '1',
-//     title: 'Byxor',
-//     location: 'default',
-//     price: '80',
-//     image: require('../../assets/tempOfferImages/frank-flores-394933.jpg'),
-
-//     category: tempAppCategories.find((category) => category.categoryId == '0'),
-//   },
-//   {
-//     itemId: '2',
-//     title: 'Kulörtvätt',
-//     location: 'default',
-//     price: '60',
-//     image: require('../../assets/tempOfferImages/francis-duval-37755.jpg'),
-//     category: tempAppCategories.find((category) => category.categoryId == '1'),
-//   },
-//   {
-//     itemId: '3',
-//     title: 'Klänning',
-//     location: 'default',
-//     price: '250',
-//     image: require('../../assets/tempOfferImages/flaunter-com-178022.jpg'),
-//     category: tempAppCategories.find((category) => category.categoryId == '2'),
-//   },
-//   {
-//     itemId: '4',
-//     title: 'Kostym',
-//     location: 'default',
-//     price: '230',
-//     image: require('../../assets/tempOfferImages/soroush-karimi-387509.jpg'),
-//     category: tempAppCategories.find((category) => category.categoryId == '3'),
-//   },
-//   {
-//     itemId: '5',
-//     title: 'Byxor1',
-//     location: 'default',
-//     price: '80',
-//     image: require('../../assets/tempOfferImages/alexandra-gorn-260989.jpg'),
-//     category: tempAppCategories.find((category) => category.categoryId == '0'),
-//   },
-//   {
-//     itemId: '6',
-//     title: 'Kulörtvätt1',
-//     location: 'default',
-//     price: '60',
-//     image: require('../../assets/tempOfferImages/dmitriy-ilkevich-437760.jpg'),
-//     category: tempAppCategories.find((category) => category.categoryId == '1'),
-//   },
-//   {
-//     itemId: '7',
-//     title: 'Klänning1',
-//     location: 'default',
-//     price: '250',
-//     image: require('../../assets/tempOfferImages/michael-frattaroli-221247.jpg'),
-//     category: tempAppCategories.find((category) => category.categoryId == '2'),
-//   },
-//   {
-//     itemId: '8',
-//     title: 'Kostym1',
-//     location: 'default',
-//     price: '230',
-//     image: require('../../assets/tempOfferImages/rui-silvestre-429616.jpg'),
-//     category: tempAppCategories.find((category) => category.categoryId == '3'),
-//   },
-//   {
-//     itemId: '9',
-//     title: 'Klänning1',
-//     location: 'default',
-//     price: '250',
-//     image: require('../../assets/tempOfferImages/tim-wright-512701.jpg'),
-//     category: tempAppCategories.find((category) => category.categoryId == '4'),
-//   },
-//   {
-//     itemId: '10',
-//     title: 'Kostym1',
-//     location: 'default',
-//     price: '230',
-//     image: require('../../assets/tempOfferImages/william-stitt-196804.jpg'),
-//     category: tempAppCategories.find((category) => category.categoryId == '0'),
-//   },
-// ];
-
 const AppProvider = (props) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
   const [postCode, setPostCode] = useState();
@@ -175,9 +84,6 @@ const AppProvider = (props) => {
   const [address, setAddress] = useState<Address>({});
 
   useEffect(() => {
-    setCategories(tempAppCategories);
-    setSelectedCategory(tempAppCategories[0]);
-
     _getDevicePostCode();
     _getAllItems();
     _getOfferItems();
@@ -214,8 +120,6 @@ const AppProvider = (props) => {
       let postCodeJSON = await AsyncStorage.getItem('@devicePostCode');
 
       if (postCodeJSON) {
-        console.log('got postcode', postCodeJSON);
-
         setPostCode(JSON.parse(postCodeJSON));
       } else {
         setPostCode(null);
@@ -226,7 +130,6 @@ const AppProvider = (props) => {
   };
 
   const _updatePostCode = async (newPostCode) => {
-    console.log('updating postcode', newPostCode);
     try {
       let postCodeJSON = JSON.stringify(newPostCode);
       await AsyncStorage.setItem('@devicePostCode', postCodeJSON);
@@ -258,6 +161,36 @@ const AppProvider = (props) => {
       _getAllItems();
     } catch (e) {
       console.log('Error writing all items', e);
+    }
+  };
+
+  // Categories Functions
+  const _getCategories = async () => {
+    try {
+      let categoriesJSON = await AsyncStorage.getItem('@categories');
+
+      if (categoriesJSON) {
+        setCategories(JSON.parse(categoriesJSON));
+        setSelectedCategory(
+          JSON.parse(categoriesJSON).filter((c: Category) => c.Id === 0)
+        );
+      } else {
+        setCategories([]);
+      }
+    } catch (e) {
+      console.log('Error reading categories from device', e);
+    }
+  };
+
+  const _updateCategories = async (newCategories: Category[]) => {
+    try {
+      newCategories.sort((a, b) => a > b);
+      newCategories.unshift({ Id: 0, Name: 'All', itemImage: '' });
+      let newCategoriesJSON = JSON.stringify(newCategories);
+      await AsyncStorage.setItem('@categories', newCategoriesJSON);
+      _getCategories();
+    } catch (e) {
+      console.log('Error writing categories', e);
     }
   };
 
@@ -427,6 +360,7 @@ const AppProvider = (props) => {
         _updateOfferItems: _updateOfferItems,
 
         categories: categories,
+        _updateCategories: _updateCategories,
 
         cart: cart,
         totalCartCount: totalCartCount,
