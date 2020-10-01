@@ -3,4 +3,5 @@ export class App_Settings {
   public static API_GET_PRODUCTS = `${this.WASH_WASH_DOMAIN}/getItems`;
   public static API_GET_CATEGORIES = `${this.WASH_WASH_DOMAIN}/getCategory`;
   public static API_GET_DEALS = `${this.WASH_WASH_DOMAIN}/getdeals`;
+  public static API_GET_TIMESLOTS = `${this.WASH_WASH_DOMAIN}/getTimeSlots`;
 }

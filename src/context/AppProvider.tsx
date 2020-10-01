@@ -69,6 +69,15 @@ export interface Pickup {
   time: string;
 }
 
+export interface TimeSlot {
+  Id: string;
+  Postcode: number;
+  City: string;
+  Date: string;
+  Time: string;
+  Zone: number;
+}
+
 const AppProvider = (props) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
   const [postCode, setPostCode] = useState();

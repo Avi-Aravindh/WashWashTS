@@ -4,6 +4,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { createStyles } from '../styles';
 import { Category } from '../context/AppProvider';
 import AppContext from '../context/AppContext';
+import { colors } from '../styles/BaseStyles';
 
 interface ListHeaderProps {
   categories: Category[];
@@ -59,7 +60,7 @@ const ListHeader = () => {
                   style={[
                     styles.overlayButtonText,
                     selectedCategory && category.Id === selectedCategory.Id
-                      ? { color: 'red' }
+                      ? { color: colors.PRIMARY }
                       : '',
                   ]}
                 >

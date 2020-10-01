@@ -7,6 +7,7 @@ import { createStyles } from '../styles';
 
 const styles = createStyles();
 const { width, height } = Dimensions.get('window');
+
 const Payment = () => {
   const navigation = useNavigation();
 
