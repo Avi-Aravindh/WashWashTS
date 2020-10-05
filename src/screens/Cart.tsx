@@ -71,7 +71,7 @@ const Cart = () => {
 
   return (
     <SafeAreaView style={styles.pageContainer}>
-      <Stepper totalPages={4} currentPage={1} />
+      <Stepper totalPages={3} currentPage={1} />
 
       <View style={{ marginTop: height * 0.05 }}>
         <View style={styles.checkoutTextContainer}>

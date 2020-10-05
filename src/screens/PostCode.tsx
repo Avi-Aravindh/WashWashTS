@@ -61,6 +61,7 @@ const PostCode = (props) => {
       setLoading(true);
 
       fetchAPI(url).then((response) => {
+        console.log(response);
         setLoading(false);
         if (response.results && response.results.length > 0) {
           setIsServiceAvailable(true);

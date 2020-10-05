@@ -70,12 +70,9 @@ export interface Pickup {
 }
 
 export interface TimeSlot {
-  Id: string;
-  Postcode: number;
-  City: string;
-  Date: string;
-  Time: string;
-  Zone: number;
+  date: string;
+  day: string;
+  timeSlots: [string];
 }
 
 const AppProvider = (props) => {

@@ -57,7 +57,7 @@ const Pickup = () => {
 
   return (
     <KeyboardAwareScrollView style={styles.pageContainer}>
-      <Stepper totalPages={4} currentPage={2} />
+      <Stepper totalPages={3} currentPage={2} />
       <View style={{ marginTop: height * 0.05 }}>
         <View
           style={{
@@ -239,7 +239,7 @@ const Pickup = () => {
                 doorNumber: doorNumber,
               };
               appContext.updateAddress(newAddress);
-              navigation.navigate('payment');
+              navigation.navigate('pickup');
             }}
           />
         </View>
