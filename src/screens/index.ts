@@ -9,3 +9,4 @@ export { default as PostCode } from './PostCode';
 export { default as Profile } from './Profile';
 export { default as ExistingOrders } from './ExistingOrders';
 export { default as OrderDetails } from './OrderDetails';
+export { default as PhoneNumber } from './PhoneNumber';

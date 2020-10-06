@@ -10,3 +10,4 @@ export { default as HeaderCart } from './HeaderCart';
 export { default as Stepper } from './Stepper';
 export { default as CustomBackButton } from './CustomBackButton';
 export { default as CircularProgress } from './CircularProgress';
+export { default as OTPInput } from './OTPInput';

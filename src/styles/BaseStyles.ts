@@ -5,6 +5,7 @@ const { width, height } = Dimensions.get('window');
 export const colors = {
   PRIMARY: '#45DDE6',
   SECONDARY_TEXT: '#858585',
+  ERROR_TEXT: '#E64564',
   INSTRUCTIONS_TEXT: '#4A4A4A',
   INFORMATION_TEXT: '#7F7F7F',
   CART_UPDATED_TEXT: '#06EFA9',
@@ -205,6 +206,12 @@ const baseStyles = {
     fontWeight: 'bold',
   },
 
+  errorText: {
+    color: colors.ERROR_TEXT,
+    fontFamily: fontFamilies.OpenSansSemiBold,
+    fontSize: fontSizes.md,
+  },
+
   primaryButton: {
     width: 170,
     height: 48,
@@ -344,6 +351,18 @@ const baseStyles = {
     height: undefined,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  otpInputText: {
+    borderWidth: 1,
+    borderColor: '#F5F5F5',
+    backgroundColor: '#EFEFEF',
+    fontSize: fontSizes.xl,
+    borderRadius: 5,
+    width: width * 0.1,
+    height: height * 0.07,
+    textAlign: 'center',
+    marginRight: 10,
   },
 };
 

@@ -35,6 +35,7 @@ import {
   Profile,
   ExistingOrders,
   OrderDetails,
+  PhoneNumber,
 } from './src/screens';
 
 //Components
@@ -89,6 +90,7 @@ export default function App() {
         <Stack.Screen name='checkout' component={Checkout} />
         <Stack.Screen name='payment' component={Payment} />
         <Stack.Screen name='pickup' component={Pickup} />
+        <Stack.Screen name='phonenumber' component={PhoneNumber} />
         <Stack.Screen name='confirmation' component={Confirmation} />
         <Stack.Screen name='profile' component={Profile} />
         <Stack.Screen name='existingOrders' component={ExistingOrders} />

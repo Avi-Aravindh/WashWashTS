@@ -89,7 +89,7 @@ const Pickup = () => {
 
   return (
     <View style={styles.pageContainer}>
-      <Stepper totalPages={3} currentPage={3} />
+      <Stepper totalPages={4} currentPage={4} />
       <View style={{ marginTop: height * 0.05 }}>
         <View
           style={{

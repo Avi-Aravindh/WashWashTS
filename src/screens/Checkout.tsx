@@ -57,7 +57,7 @@ const Pickup = () => {
 
   return (
     <KeyboardAwareScrollView style={styles.pageContainer}>
-      <Stepper totalPages={3} currentPage={2} />
+      <Stepper totalPages={4} currentPage={3} />
       <View style={{ marginTop: height * 0.05 }}>
         <View
           style={{
@@ -228,7 +228,7 @@ const Pickup = () => {
           }}
         >
           <Button
-            text='Nästa  👉🏼'
+            text='Leverans 👉🏼'
             type='primary'
             onPress={() => {
               let newAddress: Address = {
