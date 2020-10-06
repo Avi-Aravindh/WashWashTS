@@ -1,9 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { View, Image, Alert, Dimensions } from 'react-native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { createStyles } from '../styles';
@@ -32,7 +28,7 @@ const DrawerHeader = ({ navigation }) => {
             {
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginTop: hp('5%'),
+              marginTop: height * 0.05,
             },
           ]}
         >
@@ -46,7 +42,7 @@ const DrawerHeader = ({ navigation }) => {
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <Image
                 source={require('../../assets/Menu.png')}
-                style={{ marginLeft: wp('5%'), height: 35 }}
+                style={{ marginLeft: width * 0.05, height: 35 }}
               />
             </TouchableOpacity>
             <TouchableOpacity

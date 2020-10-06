@@ -11,11 +11,6 @@ import {
 import { createStyles } from '../styles';
 import { useNavigation } from '@react-navigation/native';
 
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
-
 import { Item } from '../context/AppProvider';
 
 import Button from './Button';
@@ -23,6 +18,8 @@ import Button from './Button';
 interface HomeCarouselProps {
   data: Item[];
 }
+
+const { width, height } = Dimensions.get('window');
 
 const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
   const styles = createStyles();
@@ -32,7 +29,7 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
 
   const SLIDER_WIDTH = Dimensions.get('window').width * 0.98;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 1);
-  const ITEM_HEIGHT = hp('40%');
+  const ITEM_HEIGHT = height * 0.4;
 
   const _renderImage = ({ item, index }) => {
     return (
@@ -66,9 +63,9 @@ const HomeCarousel: FunctionComponent<HomeCarouselProps> = ({ data }) => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'flex-end',
-                marginLeft: wp('5%'),
-                marginRight: wp('5%'),
-                marginBottom: hp('2%'),
+                marginLeft: width * 0.05,
+                marginRight: width * 0.05,
+                marginBottom: height * 0.02,
               }}
             >
               <View>
