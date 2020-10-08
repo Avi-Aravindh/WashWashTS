@@ -10,6 +10,7 @@ import {
   Dimensions,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -23,53 +24,21 @@ import { TimeSlot } from '../context/AppProvider';
 const styles = createStyles();
 const { width, height } = Dimensions.get('window');
 
-let tempArray = [
-  {
-    date: '05-Oct',
-    day: 'Måndag',
-    timeSlots: [
-      '06:00 - 09:00',
-      '09:00 - 12:00',
-      '15:00 - 18:00',
-      '18:00-21:00',
-    ],
-  },
-  {
-    date: '06-Oct',
-    day: 'Tisdag',
-    timeSlots: ['06:00 - 09:00', '15:00 - 18:00', '18:00-21:00'],
-  },
-  {
-    date: '07-Oct',
-    day: 'Onsdag',
-    timeSlots: ['15:00 - 18:00', '18:00-21:00'],
-  },
-  {
-    date: '08-Oct',
-    day: 'Torsdag',
-    timeSlots: ['06:00 - 09:00', '15:00 - 18:00', '18:00-21:00'],
-  },
-  {
-    date: '09-Oct',
-    day: 'Fredag',
-    timeSlots: ['15:00 - 18:00', '18:00-21:00'],
-  },
-];
-
 const Pickup = () => {
   const navigation = useNavigation();
   const appContext = useContext(AppContext);
+  const [loading, setLoading] = useState<boolean>(true);
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedSlot, setSelectedSlot] = useState('');
 
-  let url = `${App_Settings.API_GET_TIMESLOTS}?postCode=${appContext.postCode}`;
+  let url = `${App_Settings.API_GET_TIMESLOTS}?zipcode=${appContext.postCode}`;
 
   useEffect(() => {
     fetchAPI(url)
       .then((res) => {
-        // setTimeSlots(res.results);
-        setTimeSlots(tempArray);
+        setTimeSlots(res.results);
+        setLoading(false);
       })
       .catch((err) => console.log('pickup slots fetch error', err));
   }, []);
@@ -108,6 +77,7 @@ const Pickup = () => {
           </Text>
         </View>
 
+        {loading && <ActivityIndicator />}
         <ScrollView
           contentContainerStyle={{
             justifyContent: 'center',
@@ -190,6 +160,7 @@ const Pickup = () => {
           <Button
             text='Slutför 😊'
             type='primary'
+            disabled={loading}
             onPress={() => navigation.navigate('confirmation')}
           />
         </View>
