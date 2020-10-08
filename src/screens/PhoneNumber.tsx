@@ -33,21 +33,31 @@ const styles = createStyles();
 const { width, height } = Dimensions.get('window');
 
 const PhoneNumber = () => {
+  const appContext = useContext(AppContext);
+
   const navigation = useNavigation();
-  const [verified, setVerified] = useState(false);
-  const [areaCode, setAreaCode] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [verified, setVerified] = useState(appContext.verified);
+  const [countryCode, setCountryCodeCode] = useState(
+    appContext.phoneNumber ? appContext.phoneNumber.substr(0, 3) : '+46'
+  );
+  const [areaCode, setAreaCode] = useState(appContext.phoneNumber.substr(3, 3));
+  const [phoneNumber, setPhoneNumber] = useState(
+    appContext.phoneNumber.substr(6, 7)
+  );
+  const [fullPhoneNumber, setFullPhoneNumber] = useState(
+    appContext.phoneNumber
+  );
   const [sending, setSending] = useState<boolean>(false);
   const [otp, setOtp] = useState('');
-
-  const appContext = useContext(AppContext);
 
   const phoneNumberRef = useRef(null);
   const areaCodeRef = useRef(null);
 
   useEffect(() => {
-    // TODO : do a customer verification call
-    setVerified(false);
+    if (appContext.verified) {
+      setOtp('sent');
+      setVerified(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -71,6 +81,13 @@ const PhoneNumber = () => {
     setTimeout(() => {
       setSending(false);
     }, 2000);
+  };
+
+  const udpateVerification = (status) => {
+    setFullPhoneNumber(countryCode + areaCode + phoneNumber);
+    appContext._updatePhoneNumber(countryCode + areaCode + phoneNumber);
+    setVerified(status);
+    appContext._updateVerification(status);
   };
 
   const displayInstructionsText = () => {
@@ -164,7 +181,7 @@ const PhoneNumber = () => {
           <TextInput
             placeholder='Telefonnumer'
             editable={false}
-            value='+46'
+            value={countryCode}
             style={[
               styles.inputText,
               {
@@ -221,7 +238,9 @@ const PhoneNumber = () => {
       );
     }
     if (otp && !verified) {
-      return <OTPInput otp={otp} setVerified={setVerified}></OTPInput>;
+      return (
+        <OTPInput otp={otp} udpateVerification={udpateVerification}></OTPInput>
+      );
     }
 
     if (otp && verified) {

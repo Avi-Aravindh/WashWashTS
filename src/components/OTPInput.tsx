@@ -4,7 +4,7 @@ import { createStyles } from '../styles';
 
 const styles = createStyles();
 
-const OTPInput = ({ otp, setVerified }) => {
+const OTPInput = ({ otp, udpateVerification }) => {
   const [userInput, setUserInput] = useState('');
   const [error, setError] = useState(false);
   const otp0 = useRef(null);
@@ -22,7 +22,7 @@ const OTPInput = ({ otp, setVerified }) => {
     if (userInput.length === 6) {
       if (userInput === otp) {
         setError(false);
-        setVerified(true);
+        udpateVerification(true);
       } else {
         setError(true);
         Vibration.vibrate(1000);

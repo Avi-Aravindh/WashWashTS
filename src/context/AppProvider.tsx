@@ -69,14 +69,21 @@ export interface Pickup {
   time: string;
 }
 
-export interface TimeSlot {
+export interface TimeSlots {
   date: string;
   day: string;
   timeSlots: [string];
 }
+export interface TimeSlot {
+  date: string;
+  day: string;
+  timeSlot: string;
+}
 
 const AppProvider = (props) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
+  const [phoneNumber, setPhoneNumber] = useState();
+  const [verified, setVerified] = useState<boolean>();
   const [postCode, setPostCode] = useState();
   const [allItems, setAllItems] = useState<Item[]>([]);
   const [offerItems, setOfferItems] = useState<Item[]>([]);
@@ -88,11 +95,14 @@ const AppProvider = (props) => {
   const [totalCartCost, setTotalCartCost] = useState(0);
 
   const [address, setAddress] = useState<Address>({});
+  const [pickupSlot, setPickupSlot] = useState<TimeSlot>();
 
   useEffect(() => {
     _getDevicePostCode();
     _getAllItems();
     _getOfferItems();
+    _getVerification();
+    _getDevicePhoneNumber();
 
     // load cart from memory
     (async function loadCart() {
@@ -142,6 +152,59 @@ const AppProvider = (props) => {
       _getDevicePostCode();
     } catch (e) {
       console.log('Error writing postcode', e);
+    }
+  };
+
+  // DEVICE PHONE NUMBER FUNCTIONS
+  const _getDevicePhoneNumber = async () => {
+    try {
+      let phoneNumberJSON = await AsyncStorage.getItem('@devicePhoneNumber');
+
+      if (phoneNumberJSON) {
+        setPhoneNumber(JSON.parse(phoneNumberJSON));
+      } else {
+        setPhoneNumber(null);
+      }
+    } catch (e) {
+      console.log('Error reading phone number from device', e);
+    }
+  };
+
+  const _updatePhoneNumber = async (newPhoneNumber: string) => {
+    try {
+      let phoneNumberJSON = JSON.stringify(newPhoneNumber);
+      await AsyncStorage.setItem('@devicePhoneNumber', phoneNumberJSON);
+      _getDevicePhoneNumber();
+    } catch (e) {
+      console.log('Error writing phone number', e);
+    }
+  };
+
+  // PHONE NUMBER VERIFIED FUNCTIONS
+  const _getVerification = async () => {
+    try {
+      let verificationJSON = await AsyncStorage.getItem('@isUserVerified');
+
+      if (verificationJSON) {
+        console.log('verification reading', verificationJSON);
+
+        setVerified(JSON.parse(verificationJSON));
+      } else {
+        setVerified(null);
+      }
+    } catch (e) {
+      console.log('Error reading verification status from device', e);
+    }
+  };
+
+  const _updateVerification = async (newVerificationState: boolean) => {
+    console.log('verification writong', newVerificationState);
+    try {
+      let verificationJSON = JSON.stringify(newVerificationState);
+      await AsyncStorage.setItem('@isUserVerified', verificationJSON);
+      _getVerification();
+    } catch (e) {
+      console.log('Error writing verification status', e);
     }
   };
 
@@ -345,8 +408,22 @@ const AppProvider = (props) => {
     }
   };
 
+  const updatePickupSlot = (newPickupSlot: TimeSlot) => {
+    setPickupSlot(newPickupSlot);
+  };
+
   const updateSelectedCategory = (category: Category) => {
     setSelectedCategory(category);
+  };
+
+  const createOrder = () => {
+    console.log('phonenumber', phoneNumber);
+    console.log('cart', cart);
+    console.log('postCode', postCode);
+    console.log('totalCartCount', totalCartCount);
+    console.log('totalCartCost', totalCartCost);
+    console.log('address', address);
+    console.log('pickupSlot', pickupSlot);
   };
 
   return (
@@ -356,6 +433,12 @@ const AppProvider = (props) => {
 
         postCode: postCode,
         _updatePostCode: _updatePostCode,
+
+        phoneNumber: phoneNumber,
+        _updatePhoneNumber: _updatePhoneNumber,
+
+        verified: verified,
+        _updateVerification: _updateVerification,
 
         allItems: allItems,
         _updateAllItems: _updateAllItems,
@@ -376,6 +459,11 @@ const AppProvider = (props) => {
 
         address: address,
         updateAddress: updateAddress,
+
+        pickupSlot: pickupSlot,
+        updatePickupSlot: updatePickupSlot,
+
+        createOrder: createOrder,
       }}
     >
       {props.children}

@@ -20,7 +20,7 @@ import { colors } from '../styles/BaseStyles';
 import { fetchAPI } from '../utilities/APIHelpers';
 import { App_Settings } from '../constants';
 import AppContext from '../context/AppContext';
-import { TimeSlot } from '../context/AppProvider';
+import { TimeSlots } from '../context/AppProvider';
 const styles = createStyles();
 const { width, height } = Dimensions.get('window');
 
@@ -28,9 +28,7 @@ const Pickup = () => {
   const navigation = useNavigation();
   const appContext = useContext(AppContext);
   const [loading, setLoading] = useState<boolean>(true);
-  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([]);
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedSlot, setSelectedSlot] = useState('');
+  const [timeSlots, setTimeSlots] = useState<TimeSlots[]>([]);
 
   let url = `${App_Settings.API_GET_TIMESLOTS}?zipcode=${appContext.postCode}`;
 
@@ -56,6 +54,11 @@ const Pickup = () => {
     });
   }, [navigation]);
 
+  const confirmOrder = () => {
+    appContext.createOrder();
+    // navigation.navigate('confirmation');
+  };
+
   return (
     <View style={styles.pageContainer}>
       <Stepper totalPages={4} currentPage={4} />
@@ -77,7 +80,11 @@ const Pickup = () => {
           </Text>
         </View>
 
-        {loading && <ActivityIndicator />}
+        {loading && (
+          <View style={{ marginTop: 30 }}>
+            <ActivityIndicator />
+          </View>
+        )}
         <ScrollView
           contentContainerStyle={{
             justifyContent: 'center',
@@ -125,19 +132,24 @@ const Pickup = () => {
                             shadowRadius: 4,
                             elevation: 7,
                           },
-                          timeSlot.date === selectedDate &&
-                          slot === selectedSlot
+                          appContext.pickupSlot &&
+                          timeSlot.date === appContext.pickupSlot.date &&
+                          slot === appContext.pickupSlot.timeSlot
                             ? { backgroundColor: colors.PRIMARY }
                             : '',
 
-                          timeSlot.date === selectedDate &&
-                          slot === selectedSlot
+                          appContext.pickupSlot &&
+                          timeSlot.date === appContext.pickupSlot.date &&
+                          slot === appContext.pickupSlot.timeSlot
                             ? { borderColor: colors.PRIMARY }
                             : '',
                         ]}
                         onPress={() => {
-                          setSelectedDate(timeSlot.date);
-                          setSelectedSlot(slot);
+                          appContext.updatePickupSlot({
+                            day: timeSlot.day,
+                            date: timeSlot.date,
+                            timeSlot: slot,
+                          });
                         }}
                       >
                         <Text>{slot}</Text>
@@ -160,8 +172,8 @@ const Pickup = () => {
           <Button
             text='Slutför 😊'
             type='primary'
-            disabled={loading}
-            onPress={() => navigation.navigate('confirmation')}
+            disabled={!appContext.pickupSlot}
+            onPress={() => confirmOrder()}
           />
         </View>
       </View>

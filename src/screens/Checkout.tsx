@@ -230,6 +230,9 @@ const Pickup = () => {
           <Button
             text='Leverans 👉🏼'
             type='primary'
+            disabled={
+              !addressLine || !city || !postCode || !floor || !doorNumber
+            }
             onPress={() => {
               let newAddress: Address = {
                 addressLine: addressLine,
