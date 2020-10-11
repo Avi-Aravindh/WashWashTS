@@ -196,9 +196,9 @@ const Cart = () => {
 
         <View
           style={{
-            position: 'absolute',
-            marginTop: height * 0.65,
-            marginLeft: width * 0.5,
+            // position: 'absolute',
+            marginTop: 0,
+            marginRight: 30,
             flexDirection: 'row',
             justifyContent: 'flex-end',
           }}

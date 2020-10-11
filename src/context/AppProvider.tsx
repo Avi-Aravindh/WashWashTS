@@ -154,6 +154,7 @@ const AppProvider = (props) => {
       });
     }
     setMomsInformation(tempMomsInformation);
+    setTotalCartCount(totalCount);
     setTotalCartCost(totalCost);
   }, [cart]);
 
@@ -464,11 +465,11 @@ const AppProvider = (props) => {
     };
 
     console.log('orderJSON', orderJSON);
-    fetchPOSTAPI(App_Settings.API_POST_CREATE_ORDER, orderJSON)
-      .then((response) => {
-        console.log('response in app provider', response);
-      })
-      .catch((err) => console.log('app provider error', err));
+    // fetchPOSTAPI(App_Settings.API_POST_CREATE_ORDER, orderJSON)
+    //   .then((response) => {
+    //     console.log('response in app provider', response);
+    //   })
+    //   .catch((err) => console.log('app provider error', err));
   };
 
   return (

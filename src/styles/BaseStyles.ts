@@ -188,11 +188,18 @@ const baseStyles = {
 
   welcomeText: {
     fontFamily: fontFamilies.OpenSansRegular,
-    fontSize: fontSizes.lg,
+    fontSize: fontSizes.vlg,
     color: '#fff',
     textShadowColor: '#666',
     textShadowOffset: { width: -1, height: 0 },
     textShadowRadius: 10,
+  },
+
+  confirmationText: {
+    fontFamily: fontFamilies.OpenSansRegular,
+    fontSize: fontSizes.lg,
+    marginTop: 10,
+    color: '#000',
   },
 
   inputLabelText: {

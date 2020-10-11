@@ -56,7 +56,7 @@ const Pickup = () => {
 
   const confirmOrder = () => {
     appContext.createOrder();
-    // navigation.navigate('confirmation');
+    navigation.navigate('confirmation');
   };
 
   return (
