@@ -34,15 +34,10 @@ export interface Cart {
   cartItems: Item[];
 }
 
-export interface UserInformation {
-  name: string;
-  address: string;
-  city: string;
-  floor: string;
-  doorNumber: string;
-  postCode: string;
-  phoneNumber: string;
-  verified: boolean;
+export interface UserProfile {
+  firstName: string;
+  lastName: string;
+  personNumber: string;
 }
 
 export interface Order {
@@ -83,6 +78,9 @@ export interface TimeSlot {
 
 const AppProvider = (props) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [personNumber, setPersonNumber] = useState('');
   const [phoneNumber, setPhoneNumber] = useState();
   const [verified, setVerified] = useState<boolean>();
   const [postCode, setPostCode] = useState();
@@ -96,6 +94,7 @@ const AppProvider = (props) => {
   const [totalCartCost, setTotalCartCost] = useState(0);
   const [momsInformation, setMomsInformation] = useState({});
 
+  const [userProfile, setUserProfile] = useState<UserProfile>({});
   const [address, setAddress] = useState<Address>({});
   const [pickupSlot, setPickupSlot] = useState<TimeSlot>();
 
@@ -109,6 +108,11 @@ const AppProvider = (props) => {
     // load cart from memory
     (async function loadCart() {
       await _getCart();
+    })();
+
+    // load userProfile from device memory
+    (async function loadUserProfile() {
+      await _getUserProfile();
     })();
 
     // load address from device memory
@@ -395,6 +399,43 @@ const AppProvider = (props) => {
     }
   };
 
+  // User Profile Methods TODO convert _updateUserProfile and remove this function
+  const updateUserProfile = (newProfile: UserProfile) => {
+    _updateUserProfile(newProfile);
+  };
+
+  // TODO async storage and API call. Convert to promise
+  const _updateUserProfile = async (newProfile: UserProfile) => {
+    try {
+      let userProfileJSON = JSON.stringify(newProfile);
+      await AsyncStorage.setItem('@userProfile', userProfileJSON);
+      _getUserProfile();
+    } catch (e) {
+      console.log('Error writing user profile', e);
+    }
+  };
+
+  // TODO get user profile from API
+  const _getUserProfile = async () => {
+    let emptyUserProfile: UserProfile = {
+      firstName: '',
+      lastName: '',
+      personNumber: '',
+    };
+
+    try {
+      let userProfileJSON = await AsyncStorage.getItem('@userProfile');
+
+      if (userProfileJSON) {
+        setUserProfile(JSON.parse(userProfileJSON));
+      } else {
+        setUserProfile(emptyUserProfile);
+      }
+    } catch (e) {
+      console.log('Error reading userProfile', e);
+    }
+  };
+
   // Address Methods TODO convert _updateAddress and remove this function
   const updateAddress = (newAddress: Address) => {
     _updateAddress(newAddress);
@@ -503,6 +544,9 @@ const AppProvider = (props) => {
         updateSelectedCategory: updateSelectedCategory,
         updateCart: updateCart,
         emptyCart: emptyCart,
+
+        userProfile: userProfile,
+        updateUserProfile: updateUserProfile,
 
         address: address,
         updateAddress: updateAddress,

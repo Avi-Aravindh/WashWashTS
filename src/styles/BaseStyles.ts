@@ -303,7 +303,7 @@ const baseStyles = {
     fontSize: fontSizes.md,
     fontFamily: fontFamilies.OpenSansRegular,
     color: colors.USERINFO_SUBTEXT,
-    marginTop: 10,
+    // marginTop: 10,
   },
 
   addressNameHeader: {

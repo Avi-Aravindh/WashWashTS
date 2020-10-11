@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 import { CustomBackButton, Stepper, Button } from '../components';
 import { createStyles } from '../styles';
-import { Address } from '../context/AppProvider';
+import { Address, UserProfile } from '../context/AppProvider';
 import AppContext from '../context/AppContext';
 
 const styles = createStyles();
@@ -41,6 +41,14 @@ const Pickup = () => {
     setDoorNumber(currentAddress.doorNumber);
     setPostCode(currentAddress.postCode);
   }, [appContext.address]);
+
+  useEffect(() => {
+    let userProfile: UserProfile = appContext.userProfile;
+
+    setFirstName(userProfile.firstName);
+    setLastName(userProfile.lastName);
+    setPersonNumber(userProfile.personNumber);
+  }, [appContext.userProfile]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -310,8 +318,6 @@ const Pickup = () => {
 
         <View
           style={{
-            // position: 'absolute',
-            // marginTop: height * 0.63,
             marginRight: 30,
             flexDirection: 'row',
             justifyContent: 'flex-end',
@@ -331,6 +337,12 @@ const Pickup = () => {
                 floor: floor,
                 doorNumber: doorNumber,
               };
+              let newProfile: UserProfile = {
+                firstName: firstName,
+                lastName: lastName,
+                personNumber: personNumber,
+              };
+              appContext.updateUserProfile(newProfile);
               appContext.updateAddress(newAddress);
               navigation.navigate('pickup');
             }}
