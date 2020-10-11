@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, Fragment } from 'react';
 import {
   View,
   SafeAreaView,
@@ -52,9 +52,15 @@ const Cart = () => {
           />
         </TouchableOpacity>
         <View style={{ width: width * 0.01 }} />
-        <View style={{ width: width * 0.65 }}>
-          <Text style={styles.descriptionText}>{item.Name} </Text>
-          <Text style={styles.inputLabelText}>{item.Price} </Text>
+        <View
+          style={{
+            width: width * 0.65,
+          }}
+        >
+          <View>
+            <Text style={styles.descriptionText}>{item.Name} </Text>
+            <Text style={styles.inputLabelText}>{item.Price} </Text>
+          </View>
           <View style={{ alignItems: 'flex-end' }}>
             <ItemCounter
               initialCount={item.QuantityInCart}
@@ -89,6 +95,97 @@ const Cart = () => {
             {appContext.totalCartCost}
           </Text>
         </View>
+
+        <View
+          style={{
+            marginTop: 10,
+            width: width,
+            flexDirection: 'row',
+            marginLeft: width * 0.05,
+            marginRight: width * 0.05,
+            alignItems: 'center',
+          }}
+        >
+          <Text
+            style={[
+              styles.inputLabelText,
+              { textAlign: 'right', width: width * 0.225 },
+            ]}
+          >
+            Moms%
+          </Text>
+          <Text
+            style={[
+              styles.inputLabelText,
+              { textAlign: 'right', width: width * 0.225 },
+            ]}
+          >
+            Moms
+          </Text>
+          <Text
+            style={[
+              styles.inputLabelText,
+              { textAlign: 'right', width: width * 0.225 },
+            ]}
+          >
+            Netto
+          </Text>
+          <Text
+            style={[
+              styles.inputLabelText,
+              { textAlign: 'right', width: width * 0.225 },
+            ]}
+          >
+            Brutto
+          </Text>
+        </View>
+
+        {Object.keys(appContext.momsInformation).map((momsEntry) => (
+          <View
+            style={{
+              marginTop: 10,
+              width: width,
+              flexDirection: 'row',
+              marginLeft: width * 0.05,
+              marginRight: width * 0.05,
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={[
+                styles.inputLabelText,
+                { textAlign: 'right', width: width * 0.225 },
+              ]}
+            >
+              {momsEntry}
+            </Text>
+            <Text
+              style={[
+                styles.inputLabelText,
+                { textAlign: 'right', width: width * 0.225 },
+              ]}
+            >
+              {appContext.momsInformation[momsEntry].moms}
+            </Text>
+            <Text
+              style={[
+                styles.inputLabelText,
+                { textAlign: 'right', width: width * 0.225 },
+              ]}
+            >
+              {appContext.momsInformation[momsEntry].netto}
+            </Text>
+            <Text
+              style={[
+                styles.inputLabelText,
+                { textAlign: 'right', width: width * 0.225 },
+              ]}
+            >
+              {appContext.momsInformation[momsEntry].brutto}
+            </Text>
+          </View>
+        ))}
+
         <View style={{ height: height * 0.45, marginTop: 20 }}>
           <FlatList
             data={appContext.cart.cartItems}
@@ -100,7 +197,7 @@ const Cart = () => {
         <View
           style={{
             position: 'absolute',
-            marginTop: height * 0.6,
+            marginTop: height * 0.65,
             marginLeft: width * 0.5,
             flexDirection: 'row',
             justifyContent: 'flex-end',

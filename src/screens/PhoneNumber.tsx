@@ -40,12 +40,14 @@ const PhoneNumber = () => {
   const [countryCode, setCountryCodeCode] = useState(
     appContext.phoneNumber ? appContext.phoneNumber.substr(0, 3) : '+46'
   );
-  const [areaCode, setAreaCode] = useState(appContext.phoneNumber.substr(3, 3));
+  const [areaCode, setAreaCode] = useState(
+    appContext.phoneNumber ? appContext.phoneNumber.substr(3, 3) : ''
+  );
   const [phoneNumber, setPhoneNumber] = useState(
-    appContext.phoneNumber.substr(6, 7)
+    appContext.phoneNumber ? appContext.phoneNumber.substr(6, 7) : ''
   );
   const [fullPhoneNumber, setFullPhoneNumber] = useState(
-    appContext.phoneNumber
+    appContext.phoneNumber ? appContext.phoneNumber : ''
   );
   const [sending, setSending] = useState<boolean>(false);
   const [otp, setOtp] = useState('');

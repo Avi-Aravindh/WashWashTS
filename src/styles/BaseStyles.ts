@@ -127,6 +127,16 @@ const baseStyles = {
     justifyContent: 'space-between',
   },
 
+  momsContainer: {
+    marginTop: 10,
+    width: width,
+    paddingLeft: width * 0.05,
+    paddingRight: width * 0.05,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+
   headerText: {
     fontFamily: fontFamilies.OpenSansBold,
     fontSize: fontSizes.lg,

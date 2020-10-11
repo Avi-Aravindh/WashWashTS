@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AppContext from './AppContext';
 import AsyncStorage from '@react-native-community/async-storage';
-import { fetchAPI } from '../utilities/APIHelpers';
+import { fetchPOSTAPI } from '../utilities/APIHelpers';
 import { App_Settings } from '../constants';
 
 export interface appChoices {
@@ -28,6 +28,7 @@ export interface Item {
   width: number;
   height: number;
   QuantityInCart: number;
+  moms: number;
 }
 export interface Cart {
   cartItems: Item[];
@@ -93,6 +94,7 @@ const AppProvider = (props) => {
   const [cart, setCart] = useState<Cart>({ cartItems: [] });
   const [totalCartCount, setTotalCartCount] = useState(0);
   const [totalCartCost, setTotalCartCost] = useState(0);
+  const [momsInformation, setMomsInformation] = useState({});
 
   const [address, setAddress] = useState<Address>({});
   const [pickupSlot, setPickupSlot] = useState<TimeSlot>();
@@ -118,15 +120,40 @@ const AppProvider = (props) => {
   useEffect(() => {
     let totalCount: number = 0;
     let totalCost: number = 0;
+    let tempMomsInformation = {};
 
     if (cart.cartItems) {
       cart.cartItems.map((item) => {
         totalCount = totalCount + item.QuantityInCart;
         totalCost =
           totalCost + Number(item.QuantityInCart) * Number(item.Price);
+
+        let itemMoms = Number(
+          item.Price - item.Price / (1 + item.moms / 100)
+        ).toFixed(2);
+        let itemNetto = Number(item.Price - itemMoms).toFixed(2);
+        let itemBrutto = Number(item.Price);
+
+        if (!tempMomsInformation[item.moms]) {
+          tempMomsInformation[item.moms] = {
+            moms: itemMoms * item.QuantityInCart,
+            netto: itemNetto * item.QuantityInCart,
+            brutto: itemBrutto * item.QuantityInCart,
+          };
+        } else {
+          tempMomsInformation[item.moms].moms =
+            Number(tempMomsInformation[item.moms].moms) +
+            Number(itemMoms * item.QuantityInCart);
+          tempMomsInformation[item.moms].netto =
+            Number(tempMomsInformation[item.moms].netto) +
+            Number(itemNetto * item.QuantityInCart);
+          tempMomsInformation[item.moms].brutto =
+            Number(tempMomsInformation[item.moms].brutto) +
+            Number(itemBrutto * item.QuantityInCart);
+        }
       });
     }
-    setTotalCartCount(totalCount);
+    setMomsInformation(tempMomsInformation);
     setTotalCartCost(totalCost);
   }, [cart]);
 
@@ -186,8 +213,6 @@ const AppProvider = (props) => {
       let verificationJSON = await AsyncStorage.getItem('@isUserVerified');
 
       if (verificationJSON) {
-        console.log('verification reading', verificationJSON);
-
         setVerified(JSON.parse(verificationJSON));
       } else {
         setVerified(null);
@@ -417,13 +442,33 @@ const AppProvider = (props) => {
   };
 
   const createOrder = () => {
-    console.log('phonenumber', phoneNumber);
-    console.log('cart', cart);
-    console.log('postCode', postCode);
-    console.log('totalCartCount', totalCartCount);
-    console.log('totalCartCost', totalCartCost);
-    console.log('address', address);
-    console.log('pickupSlot', pickupSlot);
+    let orderJSON = {
+      phoneNumber,
+      cart: {
+        cartItems: cart.cartItems.map((item, index) => ({
+          id: index,
+          item_id: item.Id,
+          item_name: item.Name,
+          price: item.Price,
+          unit: item.Unit,
+          tax: item.moms,
+          quantity: item.QuantityInCart,
+        })),
+      },
+      postCode,
+      totalCartCost,
+      totalCartCount,
+      address,
+      pickupSlot,
+      momsInformation,
+    };
+
+    console.log('orderJSON', orderJSON);
+    fetchPOSTAPI(App_Settings.API_POST_CREATE_ORDER, orderJSON)
+      .then((response) => {
+        console.log('response in app provider', response);
+      })
+      .catch((err) => console.log('app provider error', err));
   };
 
   return (
@@ -452,6 +497,7 @@ const AppProvider = (props) => {
         cart: cart,
         totalCartCount: totalCartCount,
         totalCartCost: totalCartCost,
+        momsInformation: momsInformation,
         selectedCategory: selectedCategory,
         updateSelectedCategory: updateSelectedCategory,
         updateCart: updateCart,
