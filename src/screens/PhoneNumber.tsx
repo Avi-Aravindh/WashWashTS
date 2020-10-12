@@ -16,9 +16,12 @@ import {
   TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import personnummer from 'personnummer';
 
 import { createStyles } from '../styles';
 import AppContext from '../context/AppContext';
+import { UserProfile } from '../context/AppProvider';
+
 import {
   CustomBackButton,
   Stepper,
@@ -26,8 +29,11 @@ import {
   Button,
   OTPInput,
 } from '../components';
+import { OTPModal } from '../screens';
+
 import { Item } from '../context/AppContext';
 import { colors, fontSizes } from '../styles/BaseStyles';
+import { Value } from 'react-native-reanimated';
 
 const styles = createStyles();
 const { width, height } = Dimensions.get('window');
@@ -36,31 +42,16 @@ const PhoneNumber = () => {
   const appContext = useContext(AppContext);
 
   const navigation = useNavigation();
-  const [verified, setVerified] = useState(appContext.verified);
-  const [countryCode, setCountryCodeCode] = useState(
-    appContext.phoneNumber ? appContext.phoneNumber.substr(0, 3) : '+46'
-  );
-  const [areaCode, setAreaCode] = useState(
-    appContext.phoneNumber ? appContext.phoneNumber.substr(3, 3) : ''
-  );
-  const [phoneNumber, setPhoneNumber] = useState(
-    appContext.phoneNumber ? appContext.phoneNumber.substr(6, 7) : ''
-  );
-  const [fullPhoneNumber, setFullPhoneNumber] = useState(
-    appContext.phoneNumber ? appContext.phoneNumber : ''
-  );
-  const [sending, setSending] = useState<boolean>(false);
-  const [otp, setOtp] = useState('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [personNumber, setPersonNumber] = useState<string>('');
 
-  const phoneNumberRef = useRef(null);
-  const areaCodeRef = useRef(null);
+  const [showModal, setShowModal] = useState<boolean>(!appContext.verified);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    if (appContext.verified) {
-      setOtp('sent');
-      setVerified(true);
-    }
-  }, []);
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const personNumberRef = useRef(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -71,277 +62,177 @@ const PhoneNumber = () => {
         },
       },
       headerLeft: () => <CustomBackButton />,
-      headerTitle: () => <Text style={styles.headerText}>TELEFONNUMMER</Text>,
+      headerTitle: () => <Text style={styles.headerText}>Din information</Text>,
     });
   }, [navigation]);
 
-  useEffect(() => {}, [verified]);
+  useEffect(() => {
+    let userProfile: UserProfile = appContext.userProfile;
 
-  const sendOTP = () => {
-    setSending(true);
-    setOtp('123456');
-    setTimeout(() => {
-      setSending(false);
-    }, 2000);
+    setFirstName(userProfile.firstName);
+    setLastName(userProfile.lastName);
+    setPersonNumber(userProfile.personNumber);
+  }, [appContext.userProfile]);
+
+  const verifyPersonNumber = (value) => {
+    personnummer.valid(value) ? setError(false) : setError(true);
   };
-
-  const udpateVerification = (status) => {
-    setFullPhoneNumber(countryCode + areaCode + phoneNumber);
-    appContext._updatePhoneNumber(countryCode + areaCode + phoneNumber);
-    setVerified(status);
-    appContext._updateVerification(status);
-  };
-
-  const displayInstructionsText = () => {
-    if (!otp) {
-      return (
-        <Fragment>
-          <Text
-            style={[
-              styles.instructionText,
-              { width: width * 0.8, textAlign: 'center' },
-            ]}
-          >
-            För att kunna skapa din konto så
-          </Text>
-          <Text
-            style={[
-              styles.instructionText,
-              {
-                width: width * 0.8,
-                marginTop: 3,
-                textAlign: 'center',
-              },
-            ]}
-          >
-            behöver vi skicka en
-          </Text>
-          <Text
-            style={[
-              styles.instructionText,
-              { width: width * 0.8, marginTop: 3, textAlign: 'center' },
-            ]}
-          >
-            verifieringskod till din telefon
-          </Text>
-        </Fragment>
-      );
-    }
-    if (otp && !verified) {
-      return (
-        <Fragment>
-          <Text
-            style={[
-              styles.instructionText,
-              { width: width * 0.8, textAlign: 'center' },
-            ]}
-          >
-            Ange verifieringskoden du
-          </Text>
-          <Text
-            style={[
-              styles.instructionText,
-              {
-                width: width * 0.8,
-                marginTop: 3,
-                textAlign: 'center',
-              },
-            ]}
-          >
-            precis tagit emot
-          </Text>
-        </Fragment>
-      );
-    }
-
-    if (otp && verified) {
-      return (
-        <Fragment>
-          <Text
-            style={[
-              styles.instructionText,
-              { width: width * 0.8, textAlign: 'center' },
-            ]}
-          >
-            Goda nyheter! Telefonnummer verifierat
-          </Text>
-        </Fragment>
-      );
-    }
-  };
-
-  const displayContent = () => {
-    if (!otp && !verified) {
-      return (
+  return (
+    <SafeAreaView style={styles.pageContainer}>
+      <Stepper totalPages={4} currentPage={2} />
+      <View
+        style={{
+          marginTop: 20,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        {/* First name last name row */}
         <View
           style={{
-            width,
             flexDirection: 'row',
-            justifyContent: 'center',
+            width: width * 0.8,
+            marginTop: 50,
+            justifyContent: 'space-between',
           }}
         >
-          <TextInput
-            placeholder='Telefonnumer'
-            editable={false}
-            value={countryCode}
-            style={[
-              styles.inputText,
-              {
-                width: width * 0.15,
+          <View>
+            <Text
+              style={{
                 marginTop: 10,
-                marginRight: 10,
-                textAlign: 'left',
-                opacity: 0.5,
-              },
-            ]}
-          />
+                opacity: firstName.length > 0 ? 1 : 0,
+              }}
+            >
+              Förnamn
+            </Text>
+            <TextInput
+              ref={firstNameRef}
+              onSubmitEditing={() => lastNameRef.current.focus()}
+              placeholder='Förnamn'
+              value={firstName}
+              onChangeText={(value) => setFirstName(value)}
+              style={[
+                styles.inputText,
+                {
+                  width: width * 0.35,
+                  marginTop: 10,
+                  textAlign: 'left',
+                },
+              ]}
+            />
+          </View>
+
+          <View>
+            <Text
+              style={{
+                marginTop: 10,
+                opacity: lastName.length > 0 ? 1 : 0,
+              }}
+            >
+              Efternamn
+            </Text>
+
+            <TextInput
+              ref={lastNameRef}
+              onSubmitEditing={() => personNumberRef.current.focus()}
+              placeholder='Efternamn'
+              value={lastName}
+              onChangeText={(value) => setLastName(value)}
+              style={[
+                styles.inputText,
+                {
+                  width: width * 0.35,
+                  marginTop: 10,
+                  textAlign: 'left',
+                },
+              ]}
+            />
+          </View>
+        </View>
+
+        {/* Person Number row */}
+        <View
+          style={{
+            flexDirection: 'column',
+            width: width * 0.8,
+            marginTop: 20,
+            justifyContent: 'space-between',
+          }}
+        >
+          <Text
+            style={{ marginTop: 10, opacity: personNumber.length > 0 ? 1 : 0 }}
+          >
+            Personnummer
+          </Text>
 
           <TextInput
-            ref={areaCodeRef}
-            keyboardType='numeric'
-            placeholder='Area'
-            autoFocus
-            value={areaCode}
-            maxLength={3}
+            ref={personNumberRef}
+            placeholder='Personnummer'
+            keyboardType={'numeric'}
+            maxLength={
+              personNumber.substr(0, 2) === '19' ||
+              personNumber.substr(0, 2) === '20'
+                ? 12
+                : 10
+            }
+            value={personNumber}
             onChangeText={(value) => {
-              setAreaCode(value);
-              if (value.length === 3) {
-                phoneNumberRef.current.focus();
+              setPersonNumber(value);
+
+              if (value.substr(0, 2) === '19' || value.substr(0, 2) === '20') {
+                if (value.length === 12) {
+                  verifyPersonNumber(value);
+                }
+              } else {
+                if (value.length === 10) {
+                  verifyPersonNumber(value);
+                }
               }
             }}
-            style={[
-              styles.inputText,
-              {
-                width: width * 0.15,
-                marginTop: 10,
-                marginRight: 10,
-                textAlign: 'left',
-              },
-            ]}
-          />
-
-          <TextInput
-            ref={phoneNumberRef}
-            keyboardType='numeric'
-            placeholder='Telefonnumer'
-            value={phoneNumber}
-            maxLength={7}
-            onChangeText={(value) => setPhoneNumber(value)}
-            style={[
-              styles.inputText,
-              {
-                width: width * 0.5,
-                marginTop: 10,
-                textAlign: 'left',
-              },
-            ]}
+            style={[styles.inputText, { marginTop: 10, textAlign: 'left' }]}
           />
         </View>
-      );
-    }
-    if (otp && !verified) {
-      return (
-        <OTPInput otp={otp} udpateVerification={udpateVerification}></OTPInput>
-      );
-    }
 
-    if (otp && verified) {
-      return (
         <View
           style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            marginTop: 5,
           }}
         >
-          <Text style={styles.instructionsHeaderText}>
-            {'+46 ' + areaCode + ' ' + phoneNumber}
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              setAreaCode('');
-              setPhoneNumber('');
-              setVerified(false);
-              setOtp('');
-            }}
-          >
-            <Image
-              source={require('../../assets/pencil.png')}
-              style={{ marginLeft: 10, height: 15, width: 15 }}
-              resizeMode='contain'
-            />
-          </TouchableOpacity>
+          {error && (
+            <Text style={[styles.errorText, { textAlign: 'center' }]}>
+              Ogiltigt personnummer
+            </Text>
+          )}
         </View>
-      );
-    }
-  };
 
-  const displayButton = () => {
-    if (otp && verified) {
-      return (
         <View
           style={{
-            position: 'absolute',
-            marginTop: height * 0.3,
-            marginLeft: width * 0.5,
+            marginRight: 30,
+            marginTop: 50,
             flexDirection: 'row',
             justifyContent: 'flex-end',
+            paddingRight: 20,
+            width,
           }}
         >
           <Button
             text='Nästa 👉🏼'
             type='primary'
-            onPress={() => navigation.navigate('checkout')}
-          />
-        </View>
-      );
-    }
-  };
-
-  return (
-    <SafeAreaView style={styles.pageContainer}>
-      <Stepper totalPages={4} currentPage={2} />
-
-      <View style={{ marginTop: height * 0.04 }}>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {displayInstructionsText()}
-
-          <View style={[styles.separator]} />
-
-          <View style={{ marginTop: 30 }}>{displayContent()}</View>
-        </View>
-      </View>
-
-      {!otp && !verified && (
-        <View
-          style={{
-            marginTop: 60,
-            marginRight: 20,
-            marginLeft: width * 0.2,
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-          }}
-        >
-          {sending && <Text>Sending</Text>}
-          <Button
-            text={!sending ? 'Skicka' : 'Sändning'}
-            type='primary'
-            disabled={
-              phoneNumber.length !== 7 || areaCode.length !== 3 || sending
-            }
+            disabled={!personNumber}
             onPress={() => {
-              sendOTP();
+              let newProfile: UserProfile = {
+                firstName: firstName,
+                lastName: lastName,
+                personNumber: personNumber,
+              };
+              appContext.updateUserProfile(newProfile);
+              navigation.navigate('checkout');
             }}
           />
         </View>
-      )}
 
-      {displayButton()}
+        <OTPModal isVisible={showModal} hideModal={() => setShowModal(false)} />
+      </View>
     </SafeAreaView>
   );
 };

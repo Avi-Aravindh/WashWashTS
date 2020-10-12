@@ -4897,6 +4897,11 @@ path-parse@^1.0.6:
   resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
   integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
 
+personnummer@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/personnummer/-/personnummer-3.1.0.tgz#87169918f61f0003cd2502fa44b796af42ebd792"
+  integrity sha512-Aiyyh0+N7sGdZUUp6g6evTcHgwQ7rn3UIOTfBEpmCks2rNja0rOfUtz7K/ZVumd5aOULGQ2n3BI9UNuOsgqYaw==
+
 pify@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/pify/-/pify-4.0.1.tgz#4b2cd25c50d598735c50292224fd8c6df41e3231"

@@ -4,11 +4,15 @@ import {
   Text,
   Dimensions,
   ScrollView,
+  TouchableOpacity,
+  Image,
   ImageBackground,
 } from 'react-native';
 import { CustomBackButton } from '../components';
 import { createStyles } from '../styles';
+import withAppContext from '../context/withAppContext';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { OTPModal } from '../screens';
 
 const styles = createStyles();
 
@@ -130,6 +134,7 @@ interface ProfileProps {
 
 interface ProfileState {
   index: number;
+  showModal: boolean;
 }
 
 class Profile extends React.Component<ProfileProps, ProfileState> {
@@ -137,6 +142,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     super(props);
     this.state = {
       index: 0,
+      showModal: !props.context.verified,
     };
   }
 
@@ -277,61 +283,96 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
   render() {
     return (
       <ScrollView style={styles.pageContainer}>
-        <View
-          style={{
-            width: width,
-            alignItems: 'center',
-            marginTop: height * 0.03,
-          }}
-        >
-          <Text style={styles.userNameHeader}>Jonas Storm</Text>
-          <Text style={styles.userInfoSubText}>+1 2015656670</Text>
-        </View>
-        <View
-          style={{
-            width: width,
-            alignItems: 'flex-start',
-            paddingLeft: width * 0,
-            marginTop: height * 0.03,
-          }}
-        >
-          <Text style={{ marginLeft: width * 0.1 }}>Adress</Text>
-          <Carousel
-            layout={'default'}
-            useScrollView={true}
-            data={customerInfo.addresses}
-            renderItem={this.renderAddress}
-            itemWidth={width * 0.8}
-            sliderWidth={width}
-            autoplay={false}
-            autoplayInterval={5000}
-            onSnapToItem={(index) => this.setState({ index: index })}
-          />
-        </View>
-        <View
-          style={{
-            width: width,
-            alignItems: 'flex-start',
-            paddingLeft: width * 0,
-            marginTop: height * 0.03,
-          }}
-        >
-          <Text style={{ marginLeft: width * 0.1 }}>Betalmedel</Text>
-          <Carousel
-            layout={'default'}
-            useScrollView={true}
-            data={cards}
-            renderItem={this.renderCards}
-            itemWidth={width * 0.8}
-            sliderWidth={width}
-            autoplay={false}
-            autoplayInterval={5000}
-            onSnapToItem={(index) => this.setState({ index: index })}
-          />
-        </View>
+        {this.props.context.verified && (
+          <View>
+            <View
+              style={{
+                width: width,
+                alignItems: 'center',
+                marginTop: height * 0.03,
+              }}
+            >
+              <Text style={styles.userNameHeader}>Jonas Storm</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => {
+                    this.setState({ showModal: true });
+                  }}
+                >
+                  <Text style={styles.userInfoSubText}>
+                    {this.props.context.phoneNumber}
+                  </Text>
+
+                  <Image
+                    source={require('../../assets/pencil.png')}
+                    style={{ marginLeft: 5, height: 10, width: 10 }}
+                    resizeMode='contain'
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View
+              style={{
+                width: width,
+                alignItems: 'flex-start',
+                paddingLeft: width * 0,
+                marginTop: height * 0.03,
+              }}
+            >
+              <Text style={{ marginLeft: width * 0.1 }}>Adress</Text>
+              <Carousel
+                layout={'default'}
+                useScrollView={true}
+                data={customerInfo.addresses}
+                renderItem={this.renderAddress}
+                itemWidth={width * 0.8}
+                sliderWidth={width}
+                autoplay={false}
+                autoplayInterval={5000}
+                onSnapToItem={(index) => this.setState({ index: index })}
+              />
+            </View>
+            <View
+              style={{
+                width: width,
+                alignItems: 'flex-start',
+                paddingLeft: width * 0,
+                marginTop: height * 0.03,
+              }}
+            >
+              <Text style={{ marginLeft: width * 0.1 }}>Betalmedel</Text>
+              <Carousel
+                layout={'default'}
+                useScrollView={true}
+                data={cards}
+                renderItem={this.renderCards}
+                itemWidth={width * 0.8}
+                sliderWidth={width}
+                autoplay={false}
+                autoplayInterval={5000}
+                onSnapToItem={(index) => this.setState({ index: index })}
+              />
+            </View>
+          </View>
+        )}
+        <OTPModal
+          isVisible={this.state.showModal}
+          hideModal={() => this.setState({ showModal: false })}
+        />
       </ScrollView>
     );
   }
 }
 
-export default Profile;
+export default withAppContext(Profile);

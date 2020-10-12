@@ -14,18 +14,12 @@ const { width, height } = Dimensions.get('window');
 const Pickup = () => {
   const navigation = useNavigation();
   const appContext = useContext(AppContext);
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [personNumber, setPersonNumber] = useState<string>('');
   const [addressLine, setAddressLine] = useState<string>('');
   const [city, setCity] = useState<string>('');
   const [floor, setFloor] = useState<string>('');
   const [doorNumber, setDoorNumber] = useState<string>('');
   const [postCode, setPostCode] = useState<string>('');
 
-  const firstNameRef = useRef(null);
-  const lastNameRef = useRef(null);
-  const personNumberRef = useRef(null);
   const addressRef = useRef(null);
   const cityRef = useRef(null);
   const postCodeRef = useRef(null);
@@ -41,14 +35,6 @@ const Pickup = () => {
     setDoorNumber(currentAddress.doorNumber);
     setPostCode(currentAddress.postCode);
   }, [appContext.address]);
-
-  useEffect(() => {
-    let userProfile: UserProfile = appContext.userProfile;
-
-    setFirstName(userProfile.firstName);
-    setLastName(userProfile.lastName);
-    setPersonNumber(userProfile.personNumber);
-  }, [appContext.userProfile]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -99,85 +85,6 @@ const Pickup = () => {
             marginLeft: width * 0.1,
           }}
         >
-          {/* First name last name row */}
-          <View
-            style={{
-              flexDirection: 'row',
-              width: width * 0.8,
-              justifyContent: 'space-between',
-            }}
-          >
-            <View>
-              <Text
-                style={{
-                  marginTop: 10,
-                  opacity: firstName.length > 0 ? 1 : 0,
-                }}
-              >
-                Förnamn
-              </Text>
-              <TextInput
-                ref={firstNameRef}
-                onSubmitEditing={() => lastNameRef.current.focus()}
-                placeholder='Förnamn'
-                value={firstName}
-                onChangeText={(value) => setFirstName(value)}
-                style={[
-                  styles.inputText,
-                  {
-                    width: width * 0.35,
-                    marginTop: 10,
-                    textAlign: 'left',
-                  },
-                ]}
-              />
-            </View>
-
-            {/* Last Name Row */}
-            <View>
-              <Text
-                style={{
-                  marginTop: 10,
-                  opacity: lastName.length > 0 ? 1 : 0,
-                }}
-              >
-                Efternamn
-              </Text>
-
-              <TextInput
-                ref={lastNameRef}
-                onSubmitEditing={() => personNumberRef.current.focus()}
-                placeholder='Efternamn'
-                value={lastName}
-                onChangeText={(value) => setLastName(value)}
-                style={[
-                  styles.inputText,
-                  {
-                    width: width * 0.35,
-                    marginTop: 10,
-                    textAlign: 'left',
-                  },
-                ]}
-              />
-            </View>
-          </View>
-
-          {/* Person Number row */}
-          <Text
-            style={{ marginTop: 10, opacity: personNumber.length > 0 ? 1 : 0 }}
-          >
-            Personnummer
-          </Text>
-
-          <TextInput
-            ref={personNumberRef}
-            placeholder='Personnummer'
-            onSubmitEditing={() => addressRef.current.focus()}
-            value={personNumber}
-            onChangeText={(value) => setPersonNumber(value)}
-            style={[styles.inputText, { marginTop: 10, textAlign: 'left' }]}
-          />
-
           {/* Address Row */}
           <Text
             style={{ marginTop: 20, opacity: addressLine.length > 0 ? 1 : 0 }}
@@ -337,12 +244,6 @@ const Pickup = () => {
                 floor: floor,
                 doorNumber: doorNumber,
               };
-              let newProfile: UserProfile = {
-                firstName: firstName,
-                lastName: lastName,
-                personNumber: personNumber,
-              };
-              appContext.updateUserProfile(newProfile);
               appContext.updateAddress(newAddress);
               navigation.navigate('pickup');
             }}
