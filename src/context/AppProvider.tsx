@@ -95,6 +95,7 @@ const AppProvider = (props) => {
   const [momsInformation, setMomsInformation] = useState({});
 
   const [userProfile, setUserProfile] = useState<UserProfile>({});
+  const [allAddresses, setAllAddress] = useState<Address[]>([]);
   const [address, setAddress] = useState<Address>({});
   const [pickupSlot, setPickupSlot] = useState<TimeSlot>();
 
@@ -436,6 +437,37 @@ const AppProvider = (props) => {
     }
   };
 
+  // All Addresses Methods TODO convert _updateAddresses and remove this function
+  const updateAllAddress = (newAddresses: Address[]) => {
+    _updateAllAddress(newAddresses);
+  };
+
+  // TODO async storage and API call. Convert to promise
+  const _updateAllAddress = async (newAddresses: Address[]) => {
+    try {
+      let addressesJSON = JSON.stringify(newAddresses);
+      await AsyncStorage.setItem('@allAddresses', addressesJSON);
+      _getAllAddress();
+    } catch (e) {
+      console.log('Error writing all address', e);
+    }
+  };
+
+  // TODO get addresses from API
+  const _getAllAddress = async () => {
+    try {
+      let addressesJSON = await AsyncStorage.getItem('@allAddresses');
+
+      if (addressesJSON) {
+        setAllAddress(JSON.parse(addressesJSON));
+      } else {
+        setAllAddress([]);
+      }
+    } catch (e) {
+      console.log('Error reading all addresss', e);
+    }
+  };
+
   // Address Methods TODO convert _updateAddress and remove this function
   const updateAddress = (newAddress: Address) => {
     _updateAddress(newAddress);
@@ -484,33 +516,31 @@ const AppProvider = (props) => {
   };
 
   const createOrder = () => {
-    let orderJSON = {
-      phoneNumber,
-      cart: {
-        cartItems: cart.cartItems.map((item, index) => ({
-          id: index,
-          item_id: item.Id,
-          item_name: item.Name,
-          price: item.Price,
-          unit: item.Unit,
-          tax: item.moms,
-          quantity: item.QuantityInCart,
-        })),
-      },
-      postCode,
-      totalCartCost,
-      totalCartCount,
-      address,
-      pickupSlot,
-      momsInformation,
+    let addressJSON = {
+      addressLine: address.addressLine,
+      city: address.city,
+      postCode: address.postCode,
+      floor: address.floor,
+      doorNumber: address.doorNumber,
     };
-
-    console.log('orderJSON', orderJSON);
-    // fetchPOSTAPI(App_Settings.API_POST_CREATE_ORDER, orderJSON)
-    //   .then((response) => {
-    //     console.log('response in app provider', response);
-    //   })
-    //   .catch((err) => console.log('app provider error', err));
+    console.log(addressJSON);
+    fetchPOSTAPI(
+      App_Settings.API_POST_CREATE_ORDER,
+      JSON.stringify({
+        address: [addressJSON],
+        cart: [cart],
+        momsInformation: [momsInformation],
+        phoneNumber: phoneNumber,
+        totalCartCost: totalCartCost,
+        totalCartCount: totalCartCount,
+        postCode: postCode,
+        pickupSlot: [pickupSlot],
+      })
+    )
+      .then((response) => {
+        console.log('response in app provider', response);
+      })
+      .catch((err) => console.log('app provider error', err));
   };
 
   return (
@@ -547,6 +577,9 @@ const AppProvider = (props) => {
 
         userProfile: userProfile,
         updateUserProfile: updateUserProfile,
+
+        allAddresses: allAddresses,
+        updateAllAddress: updateAllAddress,
 
         address: address,
         updateAddress: updateAddress,

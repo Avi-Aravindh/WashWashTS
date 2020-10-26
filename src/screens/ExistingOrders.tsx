@@ -4,100 +4,11 @@ import { CustomBackButton } from '../components';
 
 import { createStyles } from '../styles';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { fetchAPI } from '../utilities/APIHelpers';
+import { App_Settings } from '../constants';
 const styles = createStyles();
 
 const { width, height } = Dimensions.get('window');
-
-let listAllOrders = {
-  errorCode: 0,
-  message: 'Success',
-  results: [
-    {
-      Id: 24,
-      Order_id: 'MjQ',
-      Created_date: 'Apr 30, 2019 10:24',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 23,
-      Order_id: 'MjM',
-      Created_date: 'Apr 30, 2019 10:23',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 22,
-      Order_id: 'MjI',
-      Created_date: 'Aug 03, 2018 05:18',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 21,
-      Order_id: 'MjE',
-      Created_date: 'Aug 03, 2018 05:15',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 19,
-      Order_id: 'MTk',
-      Created_date: 'Jul 24, 2018 08:03',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 18,
-      Order_id: 'MTg',
-      Created_date: 'Jul 24, 2018 07:33',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 17,
-      Order_id: 'MTc',
-      Created_date: 'Jul 24, 2018 07:18',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 16,
-      Order_id: 'MTY',
-      Created_date: 'Jul 24, 2018 07:14',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 15,
-      Order_id: 'MTU',
-      Created_date: 'Jul 23, 2018 10:24',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 14,
-      Order_id: 'MTQ',
-      Created_date: 'Jul 23, 2018 10:20',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 13,
-      Order_id: 'MTM',
-      Created_date: 'Jul 18, 2018 04:32',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-    {
-      Id: 12,
-      Order_id: 'MTI',
-      Created_date: 'Jul 16, 2018 16:11',
-      totalItems: 4,
-      sumPrice: '480.00',
-    },
-  ],
-};
 
 class ExistingOrders extends React.Component {
   constructor(props) {
@@ -116,6 +27,12 @@ class ExistingOrders extends React.Component {
       headerTitle: () => (
         <Text style={styles.headerText}>DINA BESTÄLLNINGAR</Text>
       ),
+    });
+
+    let url = `${App_Settings.API_GET_ALL_ORDERS}?phonenumber=442019991234`;
+
+    fetchAPI(url).then((res) => {
+      console.log('orders', res.results);
     });
   }
 
@@ -184,11 +101,11 @@ class ExistingOrders extends React.Component {
             marginTop: height * 0.05,
           }}
         >
-          <FlatList
+          {/* <FlatList
             data={listAllOrders.results}
             renderItem={this.renderItem}
             keyExtractor={(item) => item.Id.toString()}
-          />
+          /> */}
         </View>
       </View>
     );

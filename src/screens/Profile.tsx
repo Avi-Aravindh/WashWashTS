@@ -13,6 +13,8 @@ import { createStyles } from '../styles';
 import withAppContext from '../context/withAppContext';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { OTPModal } from '../screens';
+import { Address } from '../context/AppProvider';
+import { colors } from '../styles/BaseStyles';
 
 const styles = createStyles();
 
@@ -51,83 +53,31 @@ let customerInfo = {
   Delivery: '',
 };
 
-let cards = [
+let allAddresses: Address[] = [
   {
-    id: 'card_1CoXQFFZcwsjBN0lGnI6ioqd',
-    object: 'card',
-    address_city: null,
-    address_country: null,
-    address_line1: null,
-    address_line1_check: null,
-    address_line2: null,
-    address_state: null,
-    address_zip: null,
-    address_zip_check: null,
-    brand: 'MasterCard',
-    country: 'US',
-    customer: 'cus_CxhzAepiMG2eH1',
-    cvc_check: 'pass',
-    dynamic_last4: null,
-    exp_month: 12,
-    exp_year: 2020,
-    fingerprint: 'CzaVU1OyW7uHxmt6',
-    funding: 'credit',
-    last4: '4444',
-    metadata: [],
-    name: 'undefined',
-    tokenization_method: null,
+    addressLine: 'Test1',
+    city: 'As',
+    doorNumber: '5',
+    floor: '5',
+    postCode: '72212',
   },
   {
-    id: 'card_1HIGvqFZcwsjBN0lL5sYOYfN',
-    object: 'card',
-    address_city: null,
-    address_country: null,
-    address_line1: null,
-    address_line1_check: null,
-    address_line2: null,
-    address_state: null,
-    address_zip: null,
-    address_zip_check: null,
-    brand: 'Visa',
-    country: 'US',
-    customer: 'cus_CxhzAepiMG2eH1',
-    cvc_check: 'pass',
-    dynamic_last4: null,
-    exp_month: 12,
-    exp_year: 2020,
-    fingerprint: 'qP8h0I2hvhD7CHpb',
-    funding: 'credit',
-    last4: '1111',
-    metadata: [],
-    name: 'Vivek',
-    tokenization_method: null,
+    addressLine: 'Test2',
+    city: 'As',
+    doorNumber: '5',
+    floor: '5',
+    postCode: '72211',
   },
   {
-    id: 'card_1CvgLuFZcwsjBN0lFTvZklKz',
-    object: 'card',
-    address_city: null,
-    address_country: null,
-    address_line1: null,
-    address_line1_check: null,
-    address_line2: null,
-    address_state: null,
-    address_zip: null,
-    address_zip_check: null,
-    brand: 'Visa',
-    country: 'US',
-    customer: 'cus_CxhzAepiMG2eH1',
-    cvc_check: 'pass',
-    dynamic_last4: null,
-    exp_month: 12,
-    exp_year: 2020,
-    fingerprint: 'udHVhLBRSu24mXJn',
-    funding: 'credit',
-    last4: '4242',
-    metadata: [],
-    name: 'undefined',
-    tokenization_method: null,
+    addressLine: 'Test3',
+    city: 'As',
+    doorNumber: '5',
+    floor: '5',
+    postCode: '72212',
   },
+  {},
 ];
+
 interface ProfileProps {
   props: any;
 }
@@ -144,6 +94,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
       index: 0,
       showModal: !props.context.verified,
     };
+    this.renderAddress = this.renderAddress.bind(this);
   }
 
   componentDidMount() {
@@ -180,19 +131,38 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
           marginBottom: 10,
         }}
       >
-        <View style={{ marginLeft: 30 }}>
-          <Text style={styles.addressNameHeader}>
-            {item.Name + ' ' + item.lastName}
-          </Text>
-          <View style={{ marginTop: 10 }}>
-            <Text style={styles.addressDetails}>
-              {item.Address + ' ' + item.Floor_no}
+        {item.addressLine && (
+          <View style={{ marginLeft: 30 }}>
+            <Text style={styles.addressNameHeader}>
+              {this.props.context.userProfile.firstName +
+                ' ' +
+                this.props.context.userProfile.lastName}
             </Text>
-            <Text style={styles.addressDetails}>
-              {item.Zipcode + ' ' + item.City}
-            </Text>
+            <View style={{ marginTop: 10 }}>
+              <Text style={styles.addressDetails}>
+                {item.addressLine + ' ' + item.floor}
+              </Text>
+              <Text style={styles.addressDetails}>
+                {item.postCode + ' ' + item.city}
+              </Text>
+            </View>
           </View>
-        </View>
+        )}
+        {!item.addressLine && (
+          <TouchableOpacity style={{ height: '100%', width: '100%' }}>
+            <View
+              style={{
+                backgroundColor: colors.PRIMARY,
+                height: '70%',
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text style={styles.primaryButtonText}>Add new address</Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -292,12 +262,16 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
                 marginTop: height * 0.03,
               }}
             >
-              <Text style={styles.userNameHeader}>Jonas Storm</Text>
+              <Text style={styles.userNameHeader}>
+                {this.props.context.userProfile.firstName}
+                {' ' + this.props.context.userProfile.lastName}
+              </Text>
               <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
                   alignItems: 'center',
+                  marginTop: 10,
                 }}
               >
                 <TouchableOpacity
@@ -334,29 +308,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
               <Carousel
                 layout={'default'}
                 useScrollView={true}
-                data={customerInfo.addresses}
+                data={allAddresses}
                 renderItem={this.renderAddress}
-                itemWidth={width * 0.8}
-                sliderWidth={width}
-                autoplay={false}
-                autoplayInterval={5000}
-                onSnapToItem={(index) => this.setState({ index: index })}
-              />
-            </View>
-            <View
-              style={{
-                width: width,
-                alignItems: 'flex-start',
-                paddingLeft: width * 0,
-                marginTop: height * 0.03,
-              }}
-            >
-              <Text style={{ marginLeft: width * 0.1 }}>Betalmedel</Text>
-              <Carousel
-                layout={'default'}
-                useScrollView={true}
-                data={cards}
-                renderItem={this.renderCards}
                 itemWidth={width * 0.8}
                 sliderWidth={width}
                 autoplay={false}

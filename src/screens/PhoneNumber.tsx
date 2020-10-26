@@ -87,6 +87,36 @@ const PhoneNumber = () => {
           alignItems: 'center',
         }}
       >
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 10,
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            onPress={() => setShowModal(true)}
+          >
+            <Text
+              style={([styles.userInfoSubText], { fontSize: fontSizes.lg })}
+            >
+              {appContext.phoneNumber}
+            </Text>
+
+            <Image
+              source={require('../../assets/pencil.png')}
+              style={{ marginLeft: 5, height: 10, width: 10 }}
+              resizeMode='contain'
+            />
+          </TouchableOpacity>
+        </View>
+
         {/* First name last name row */}
         <View
           style={{

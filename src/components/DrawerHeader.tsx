@@ -45,10 +45,7 @@ const DrawerHeader = ({ navigation }) => {
                 style={{ marginLeft: width * 0.05, height: 35 }}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-              // onPress={() => navigation.navigate('postCodeModal')}
-              onPress={() => setShowModal((prev) => !prev)}
-            >
+            <TouchableOpacity onPress={() => setShowModal(true)}>
               <Image
                 source={require('../../assets/location.png')}
                 style={{ marginLeft: 10, height: 25, width: 25 }}
