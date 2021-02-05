@@ -13,6 +13,9 @@ const { width, height } = Dimensions.get('window');
 class ExistingOrders extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      allOrders: [],
+    };
   }
 
   componentDidMount() {
@@ -33,6 +36,9 @@ class ExistingOrders extends React.Component {
 
     fetchAPI(url).then((res) => {
       console.log('orders', res.results);
+      this.setState({
+        allOrders: res.results,
+      });
     });
   }
 
@@ -73,14 +79,14 @@ class ExistingOrders extends React.Component {
               <Text style={styles.secondaryButtonText}>ANTAL ARTIKLAR: </Text>
 
               <Text style={{ flexDirection: 'row', marginRight: 10 }}>
-                {item.totalItems}
+                {item.Totalcartcount}
               </Text>
             </View>
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.secondaryButtonText}>TOTALBELOPP: </Text>
 
               <Text style={{ flexDirection: 'row', marginBottom: 10 }}>
-                {item.sumPrice}
+                {item.Totalcartcost}
               </Text>
             </View>
           </View>
@@ -101,11 +107,11 @@ class ExistingOrders extends React.Component {
             marginTop: height * 0.05,
           }}
         >
-          {/* <FlatList
-            data={listAllOrders.results}
+          <FlatList
+            data={this.state.allOrders}
             renderItem={this.renderItem}
             keyExtractor={(item) => item.Id.toString()}
-          /> */}
+          />
         </View>
       </View>
     );

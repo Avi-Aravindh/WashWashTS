@@ -30,7 +30,7 @@ const PostCode = (props) => {
   const [isServiceAvailable, setIsServiceAvailable] = useState<Boolean>(false);
 
   useEffect(() => {
-    setPostCode(appContext.postCode ? appContext.postCode : '');
+    setPostCode(appContext.postCode ? appContext.postCode : '72212');
     if (postCode) {
       let postCodeArray = postCode.split('');
       if (postCodeArray[2] !== ' ') {

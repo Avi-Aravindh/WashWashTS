@@ -523,18 +523,31 @@ const AppProvider = (props) => {
       floor: address.floor,
       doorNumber: address.doorNumber,
     };
-    console.log(addressJSON);
-    fetchPOSTAPI(
-      App_Settings.API_POST_CREATE_ORDER,
+    console.log(
       JSON.stringify({
-        address: [addressJSON],
-        cart: [cart],
-        momsInformation: [momsInformation],
+        address: addressJSON,
+        cart: cart.cartItems,
+        momsInformation: momsInformation,
         phoneNumber: phoneNumber,
         totalCartCost: totalCartCost,
         totalCartCount: totalCartCount,
         postCode: postCode,
-        pickupSlot: [pickupSlot],
+        pickupSlot: pickupSlot,
+        userProfile: userProfile,
+      })
+    );
+    fetchPOSTAPI(
+      App_Settings.API_POST_CREATE_ORDER,
+      JSON.stringify({
+        address: addressJSON,
+        cart: cart.cartItems,
+        momsInformation: momsInformation,
+        phoneNumber: phoneNumber,
+        totalCartCost: totalCartCost,
+        totalCartCount: totalCartCount,
+        postCode: postCode,
+        pickupSlot: pickupSlot,
+        userProfile: userProfile,
       })
     )
       .then((response) => {
