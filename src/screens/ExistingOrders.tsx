@@ -98,7 +98,7 @@ class ExistingOrders extends React.Component {
   render() {
     return (
       <View style={styles.pageContainer}>
-        <Text>Needs API & Design. Static list for now</Text>
+        {/* <Text>Needs API & Design. Static list for now</Text> */}
 
         <View
           style={{

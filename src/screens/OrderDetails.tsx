@@ -117,7 +117,7 @@ const OrderDetails = (props) => {
         progress={detailsFromAPI.percent}
         dayCount={detailsFromAPI.dayCount}
       />
-      <Text>Needs API & Design. Static list for now</Text>
+      {/* <Text>Needs API & Design. Static list for now</Text> */}
 
       <View
         style={{
